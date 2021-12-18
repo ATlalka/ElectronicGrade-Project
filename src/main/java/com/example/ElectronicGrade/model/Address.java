@@ -14,4 +14,15 @@ public class Address {
     @Column(name = "ulica")
     private String street;
 
+    @Column(name = "numerDomu")
+    private Integer number;
+
+    @Column(name = "numerMieszkania")
+    private Integer flatNumber;
+
+    @Column(name = "miejscowosc")
+    private String city;
+
+    @Column(name = "kodPocztowy")
+    private String postalCode;
 }
