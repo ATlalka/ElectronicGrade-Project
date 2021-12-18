@@ -4,12 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "uczniowie")
-public class Student {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "idUczen")
-    private Long id;
-
+@PrimaryKeyJoinColumn(name = "UzytkownicyidUzytkownik")
+public class Student extends User {
 
 }
