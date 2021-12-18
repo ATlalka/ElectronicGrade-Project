@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "klasy")
-public class Form {
+public class Class {
 
     @Id
     @GeneratedValue

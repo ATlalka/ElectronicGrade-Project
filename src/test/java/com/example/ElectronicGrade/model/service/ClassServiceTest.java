@@ -1,6 +1,6 @@
 package com.example.ElectronicGrade.model.service;
 
-import com.example.ElectronicGrade.model.Form;
+import com.example.ElectronicGrade.model.Class;
 import com.example.ElectronicGrade.model.Student;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,16 +13,16 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class FormServiceTest {
+public class ClassServiceTest {
 
     @Autowired
-    private FormService formService;
+    private ClassService classService;
 
     @Test
     public void whenApplicationStarts_thenHibernateCreatesInitialRecords() {
-        List<Form> forms = formService.list();
-        List<Student> students = forms.get(0).getStudents();
-        Assert.assertTrue("Records unfetched", forms.size() > 0);
+        List<Class> classes = classService.list();
+        List<Student> students = classes.get(0).getStudents();
+        Assert.assertTrue("Records unfetched", classes.size() > 0);
     }
 
 }
