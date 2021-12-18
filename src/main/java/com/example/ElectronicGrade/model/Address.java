@@ -3,7 +3,7 @@ package com.example.ElectronicGrade.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Adresy")
+@Table(name = "adresy")
 public class Address {
 
     @Id

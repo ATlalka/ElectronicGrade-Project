@@ -1,6 +1,7 @@
-package com.example.ElectronicGrade.service;
+package com.example.ElectronicGrade.model.service;
 
-import com.example.ElectronicGrade.model.Address;
+import com.example.ElectronicGrade.model.Form;
+import com.example.ElectronicGrade.model.Student;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,20 +11,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class AddressServiceTest {
+public class FormServiceTest {
 
     @Autowired
-    private AddressService addressService;
+    private FormService formService;
 
     @Test
     public void whenApplicationStarts_thenHibernateCreatesInitialRecords() {
-        List<Address> books = addressService.list();
-
-        Assert.assertTrue("Records unfetched", books.size() > 0);
+        List<Form> forms = formService.list();
+        List<Student> students = forms.get(0).getStudents();
+        Assert.assertTrue("Records unfetched", forms.size() > 0);
     }
 
 }

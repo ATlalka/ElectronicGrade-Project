@@ -1,4 +1,4 @@
-package com.example.ElectronicGrade.repository;
+package com.example.ElectronicGrade.model.repository;
 
 import com.example.ElectronicGrade.model.Address;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,19 +1,19 @@
-package com.example.ElectronicGrade.service;
+package com.example.ElectronicGrade.model.service;
 
 import com.example.ElectronicGrade.model.Address;
-import com.example.ElectronicGrade.repository.AddressRepository;
+import com.example.ElectronicGrade.model.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class AddressService {
+public class StudentService {
 
     @Autowired
-    private AddressRepository bookRepository;
+    private StudentRepository studentRepository;
 
     public List<Address> list() {
-        return bookRepository.findAll();
+        return studentRepository.findAll();
     }
 }
