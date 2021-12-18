@@ -1,0 +1,1 @@
+INSERT INTO Nauczyciele (`idNauczyciel`, `UzytkownicyidUzytkownik`, `TytulNaukowy`) VALUES ("1", "13", "Magister"),("2", "14", "Magister"),("3", "15", "Magister"),("4", "16", "Magister"),("5", "17", "Magister"),("6", "18", "Magister")

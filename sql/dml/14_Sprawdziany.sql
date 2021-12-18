@@ -1,0 +1,1 @@
+INSERT INTO Sprawdziany (`idSprawdzian`, `Komentarz`, `LekcjeidLekcja`) VALUES ("1", "Consectetur Adipiscing Elit", "3")

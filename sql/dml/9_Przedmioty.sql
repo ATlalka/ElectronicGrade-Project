@@ -1,0 +1,1 @@
+INSERT INTO Przedmioty (`idPrzedmiot`, `Nazwa`) VALUES ("1", "Matematyka"),("2", "Polski"),("3", "Fizyka"),("4", "Informatyka"),("5", "Włoski"),("6", "Angielski"),("7", "Historia"),("8", "WF"),("9", "WOS")
