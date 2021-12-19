@@ -14,8 +14,8 @@ public class Teacher extends User {
     private boolean ifEducator;
 
     @OneToOne
-    @JoinColumn (name = "KlasaidKlasy", referencedColumnName = "idKlasy")
-    private int classId;
+    @JoinColumn (name = "KlasyidKlasa", referencedColumnName = "idKlasa")
+    private Class onesClass;
 
 
 }

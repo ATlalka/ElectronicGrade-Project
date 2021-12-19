@@ -12,10 +12,10 @@ public class Grade {
     private Long id;
 
     @Column (name = "wartosc")
-    private double value;
+    private Double value;
 
     @Column(name = "waga")
-    private double weight;
+    private Double weight;
 
     @Column(name = "komentarz")
     private String desc;
