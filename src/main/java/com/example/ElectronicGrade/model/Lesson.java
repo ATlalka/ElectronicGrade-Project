@@ -1,5 +1,7 @@
 package com.example.ElectronicGrade.model;
 
+import com.sun.xml.bind.v2.TODO;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
@@ -19,14 +21,12 @@ public class Lesson {
     @Column (name = "data")
     private Date date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "LekcjeidLekcja", referencedColumnName = "idLekcja")
-    private List<Object> grades;
+    private List<Grade> grades;
 
-    public List<Object> getGrades() {
+    public List<Grade> getGrades() {
         return grades;
     }
 
-    // TO DO: co z kluczem obcym w tej kolumnie
-    // TO DO: dopisać listę ocen (i obecności)
 }
