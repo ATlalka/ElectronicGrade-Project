@@ -189,7 +189,7 @@ JOIN
 JOIN
     Osoby s ON s.idOsoba = y.OsobyidOsoba   
 WHERE 
-	n.idNauczyciel = idNauczyciela
+	n.idUzytkownik = idNauczyciela
 ORDER BY
 	p.Nazwa;
 END$$
@@ -255,7 +255,7 @@ JOIN
 JOIN
     Osoby o ON o.idOsoba = u.OsobyidOsoba
 WHERE 
-	n.idNauczyciel = idNauczyciela
+	n.idUzytkownik = idNauczyciela
 ORDER BY
 	l.data desc;
 END$$
@@ -341,9 +341,9 @@ JOIN
 Join
 	Klasy k ON z.KlasyidKlasa = k.idKlasa
 JOIN 
-	Nauczyciele n ON n.idNauczyciel = z.NauczycieleidNauczyciel
+	Nauczyciele n ON n.idUzytkownik = z.NauczycieleidNauczyciel
 WHERE 
-	n.idNauczyciel = idNauczyciela
+	n.idUzytkownik = idNauczyciela
 ORDER BY
 	l.data desc;
 END$$

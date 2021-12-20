@@ -1,1 +1,1 @@
-INSERT INTO Administratorzy (`idAdministrator`, `UzytkownicyidUzytkownik`) VALUES ("1", "31")
+INSERT INTO Administratorzy (`idUzytkownik`) VALUES ("31")

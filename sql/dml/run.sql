@@ -1,0 +1,17 @@
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\1_Adresy.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\2_DaneLogowania.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\3_Osoby.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\4_Uzytkownicy.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\5_Rodzice.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\6_Nauczyciele.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\7_Klasy.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\8_Uczniowie.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\9_Przedmioty.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\10_Zajecia.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\11_Specjalnosci.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\12_Rozszerzenia.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\13_Lekcje.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\14_Sprawdziany.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\15_Oceny.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\16_Administratorzy.sql
+source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\17_Obecnosci.sql

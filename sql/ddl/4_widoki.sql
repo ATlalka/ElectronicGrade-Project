@@ -3,7 +3,7 @@ CREATE VIEW ListaNauczycieli
 AS 
 SELECT 
     DISTINCT CONCAT(CONCAT(o.imie, ' '), o.nazwisko) "Nauczyciel", p.Nazwa "Przedmiot", 
-    (SELECT COUNT(idZajecia) FROM Zajecia z WHERE z.NauczycieleidNauczyciel = n.idNauczyciel AND z.PrzedmiotyidPrzedmiot = p.idPrzedmiot) "Liczba godzin w tygodniu", o.Plec "Plec"
+    (SELECT COUNT(idZajecia) FROM Zajecia z WHERE z.NauczycieleidNauczyciel = n.idUzytkownik AND z.PrzedmiotyidPrzedmiot = p.idPrzedmiot) "Liczba godzin w tygodniu", o.Plec "Plec"
 FROM
     Zajecia z
 JOIN
