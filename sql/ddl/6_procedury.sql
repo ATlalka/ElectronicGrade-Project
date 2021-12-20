@@ -46,7 +46,7 @@ BEGIN
     UPDATE Uzytkownicy
     SET Zarchiwizowany = 1
     WHERE idUzytkownik IN
-    (SELECT UzytkownicyidUzytkownik FROM Uczniowie
+    (SELECT idUzytkownik FROM Uczniowie
     WHERE KlasyidKlasa = idKlasa);
     
     UPDATE Zajecia
@@ -79,15 +79,15 @@ FROM
 JOIN
     Przedmioty p ON p.idPrzedmiot = z.PrzedmiotyidPrzedmiot
 JOIN
-    Nauczyciele n ON n.idNauczyciel = z.NauczycieleidNauczyciel
+    Nauczyciele n ON n.idUzytkownik = z.NauczycieleidNauczyciel
 JOIN
-    Uzytkownicy u ON u.idUzytkownik = n.UzytkownicyidUzytkownik
+    Uzytkownicy u ON u.idUzytkownik = n.idUzytkownik
 JOIN
     Osoby o ON o.idOsoba = u.OsobyidOsoba
 JOIN
     Klasy k ON k.idKlasa = z.KlasyidKlasa
 WHERE 
-	n.idNauczyciel = idNauczyciela;
+	n.idUzytkownik = idNauczyciela;
 END$$
 DELIMITER ;
 
@@ -108,17 +108,17 @@ JOIN
 JOIN
     Uczniowie c ON c.KlasyidKlasa = k.idKlasa
 JOIN
-    Uzytkownicy u ON u.idUzytkownik = c.UzytkownicyidUzytkownik
+    Uzytkownicy u ON u.idUzytkownik = c.idUzytkownik
 JOIN
     Osoby o ON o.idOsoba = u.OsobyidOsoba
 JOIN
-	Nauczyciele n ON n.idNauczyciel = z.NauczycieleidNauczyciel
+	Nauczyciele n ON n.idUzytkownik = z.NauczycieleidNauczyciel
 JOIN
-	Uzytkownicy t ON t.idUzytkownik = n.UzytkownicyidUzytkownik
+	Uzytkownicy t ON t.idUzytkownik = n.idUzytkownik
 JOIN
 	Osoby b ON b.idOsoba = t.OsobyidOsoba
 WHERE 
-	c.idUczen = idUcznia;
+	c.idUzytkownik = idUcznia;
 END$$
 DELIMITER ;
 
@@ -143,17 +143,17 @@ JOIN
 JOIN
     Uczniowie c ON c.KlasyidKlasa = k.idKlasa
 JOIN
-    Uzytkownicy u ON u.idUzytkownik = c.UzytkownicyidUzytkownik
+    Uzytkownicy u ON u.idUzytkownik = c.idUzytkownik
 JOIN
     Osoby o ON o.idOsoba = u.OsobyidOsoba
 JOIN
-	Nauczyciele n ON n.idNauczyciel = z.NauczycieleidNauczyciel
+	Nauczyciele n ON n.idUzytkownik = z.NauczycieleidNauczyciel
 JOIN
-    Uzytkownicy y ON y.idUzytkownik = n.UzytkownicyidUzytkownik
+    Uzytkownicy y ON y.idUzytkownik = n.idUzytkownik
 JOIN
     Osoby s ON s.idOsoba = y.OsobyidOsoba
 WHERE 
-	c.idUczen = idUcznia
+	c.idUzytkownik = idUcznia
 ORDER BY
 	p.Nazwa;
 END$$
@@ -179,13 +179,13 @@ JOIN
 JOIN
     Uczniowie c ON c.KlasyidKlasa = k.idKlasa
 JOIN
-    Uzytkownicy u ON u.idUzytkownik = c.UzytkownicyidUzytkownik
+    Uzytkownicy u ON u.idUzytkownik = c.idUzytkownik
 JOIN
     Osoby o ON o.idOsoba = u.OsobyidOsoba
 JOIN
-	Nauczyciele n ON n.idNauczyciel = z.NauczycieleidNauczyciel
+	Nauczyciele n ON n.idUzytkownik = z.NauczycieleidNauczyciel
 JOIN
-    Uzytkownicy y ON y.idUzytkownik = n.UzytkownicyidUzytkownik
+    Uzytkownicy y ON y.idUzytkownik = n.idUzytkownik
 JOIN
     Osoby s ON s.idOsoba = y.OsobyidOsoba   
 WHERE 
@@ -215,17 +215,17 @@ JOIN
 JOIN
     Uczniowie c ON c.KlasyidKlasa = k.idKlasa
 JOIN
-    Uzytkownicy u ON u.idUzytkownik = c.UzytkownicyidUzytkownik
+    Uzytkownicy u ON u.idUzytkownik = c.idUzytkownik
 JOIN
     Osoby o ON o.idOsoba = u.OsobyidOsoba
 JOIN
-	Nauczyciele n ON n.idNauczyciel = z.NauczycieleidNauczyciel
+	Nauczyciele n ON n.idUzytkownik = z.NauczycieleidNauczyciel
 JOIN
-    Uzytkownicy a ON a.idUzytkownik = n.UzytkownicyidUzytkownik
+    Uzytkownicy a ON a.idUzytkownik = n.idUzytkownik
 JOIN
     Osoby b ON b.idOsoba = a.OsobyidOsoba
 WHERE 
-	c.idUczen = idUcznia
+	c.idUzytkownik = idUcznia
 ORDER BY
 	l.data desc;
 END$$
@@ -249,9 +249,9 @@ JOIN
 JOIN
     Klasy k ON k.idKlasa = z.KlasyidKlasa
 JOIN
-	Nauczyciele n ON n.idNauczyciel = z.NauczycieleidNauczyciel
+	Nauczyciele n ON n.idUzytkownik = z.NauczycieleidNauczyciel
 JOIN
-    Uzytkownicy u ON u.idUzytkownik = n.UzytkownicyidUzytkownik
+    Uzytkownicy u ON u.idUzytkownik = n.idUzytkownik
 JOIN
     Osoby o ON o.idOsoba = u.OsobyidOsoba
 WHERE 
@@ -274,9 +274,9 @@ FROM
 JOIN
     Lekcje l ON l.idLekcja = c.LekcjeidLekcja
 JOIN
-    Uczniowie d ON d.idUczen = c.UczniowieidUczen
+    Uczniowie d ON d.idUzytkownik = c.UczniowieidUczen
 JOIN
-    Uzytkownicy u ON u.idUzytkownik = d.UzytkownicyidUzytkownik
+    Uzytkownicy u ON u.idUzytkownik = d.idUzytkownik
 JOIN
     Osoby o ON o.idOsoba = u.OsobyidOsoba
 JOIN
@@ -284,7 +284,7 @@ JOIN
 JOIN
 	Przedmioty p ON p.idPrzedmiot = z.PrzedmiotyidPrzedmiot
 WHERE 
-	d.idUczen = idUcznia
+	d.idUzytkownik = idUcznia
 ORDER BY
 	l.data desc;
 END$$
@@ -308,17 +308,17 @@ JOIN
 JOIN
     Uczniowie d ON k.idKlasa = d.KlasyidKlasa
 JOIN
-    Uzytkownicy u ON u.idUzytkownik = d.UzytkownicyidUzytkownik
+    Uzytkownicy u ON u.idUzytkownik = d.idUzytkownik
 JOIN
     Osoby o ON o.idOsoba = u.OsobyidOsoba
 JOIN
-	Nauczyciele n ON n.idNauczyciel = z.NauczycieleidNauczyciel
+	Nauczyciele n ON n.idUzytkownik = z.NauczycieleidNauczyciel
 JOIN
-    Uzytkownicy c ON c.idUzytkownik = n.UzytkownicyidUzytkownik
+    Uzytkownicy c ON c.idUzytkownik = n.idUzytkownik
 JOIN
     Osoby b ON b.idOsoba = c.OsobyidOsoba
 WHERE 
-	d.idUczen = idUcznia
+	d.idUzytkownik = idUcznia
 ORDER BY
 	l.data desc;
 END$$

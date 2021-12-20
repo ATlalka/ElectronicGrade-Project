@@ -9,9 +9,9 @@ FROM
 JOIN
     Przedmioty p ON p.idPrzedmiot = z.PrzedmiotyidPrzedmiot
 JOIN
-    Nauczyciele n ON n.idNauczyciel = z.NauczycieleidNauczyciel
+    Nauczyciele n ON n.idUzytkownik = z.NauczycieleidNauczyciel
 JOIN
-    Uzytkownicy u ON u.idUzytkownik = n.UzytkownicyidUzytkownik
+    Uzytkownicy u ON u.idUzytkownik = n.idUzytkownik
 JOIN
     Osoby o ON o.idOsoba = u.OsobyidOsoba;
     
@@ -33,6 +33,6 @@ FROM
 JOIN
     Uczniowie d ON k.idKlasa = d.KlasyidKlasa
 JOIN
-    Uzytkownicy u ON u.idUzytkownik = d.UzytkownicyidUzytkownik
+    Uzytkownicy u ON u.idUzytkownik = d.idUzytkownik
 JOIN
     Osoby o ON o.idOsoba = u.OsobyidOsoba;
