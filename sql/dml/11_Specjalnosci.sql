@@ -1,1 +1,1 @@
-INSERT INTO Specjalnosci (`idSpecjalnosc`, `PrzedmiotyidPrzedmiot`, `NauczycieleidNauczyciel`) VALUES ("1", "1", "1"),("2", "2", "2"),("3", "3", "1"),("4", "4", "5"),("5", "5", "2"),("6", "6", "6"),("7", "7", "4"),("8", "8", "3"),("9", "9", "4")
+INSERT INTO Specjalnosci (`idSpecjalnosc`, `PrzedmiotyidPrzedmiot`, `NauczycieleidNauczyciel`) VALUES ("1", "1", "13"),("2", "2", "14"),("3", "3", "13"),("4", "4", "17"),("5", "5", "14"),("6", "6", "18"),("7", "7", "16"),("8", "8", "15"),("9", "9", "16");
