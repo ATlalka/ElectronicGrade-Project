@@ -21,7 +21,7 @@ public class Class {
     @Column(name = "rocznik")
     private Integer year;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany ()
     @JoinColumn(name = "KlasyidKlasa", referencedColumnName = "idKlasa")
     private List<Student> students;
 

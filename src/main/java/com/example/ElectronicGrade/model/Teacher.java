@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Nauczyciele")
-@PrimaryKeyJoinColumn(name = "UzytkownicyidUzytkownik")
 public class Teacher extends User {
 
     @Column(name="TytulNaukowy")
@@ -16,6 +15,5 @@ public class Teacher extends User {
     @OneToOne
     @JoinColumn (name = "KlasyidKlasa", referencedColumnName = "idKlasa")
     private Class onesClass;
-
 
 }
