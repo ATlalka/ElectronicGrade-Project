@@ -14,4 +14,3 @@ source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrad
 source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\14_Sprawdziany.sql
 source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\15_Oceny.sql
 source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\16_Administratorzy.sql
-source C:\Users\mikol\OneDrive - Politechnika Wroclawska\Projekty\ElectronicGrade\sql\dml\17_Obecnosci.sql
