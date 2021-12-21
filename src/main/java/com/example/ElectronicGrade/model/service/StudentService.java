@@ -1,6 +1,7 @@
 package com.example.ElectronicGrade.model.service;
 
 import com.example.ElectronicGrade.model.Address;
+import com.example.ElectronicGrade.model.Student;
 import com.example.ElectronicGrade.model.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    public List<Address> list() {
+    public List<Student> list() {
         return studentRepository.findAll();
     }
 }
