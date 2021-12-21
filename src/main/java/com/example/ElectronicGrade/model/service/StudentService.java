@@ -1,7 +1,6 @@
 package com.example.ElectronicGrade.model.service;
 
-import com.example.ElectronicGrade.model.Address;
-import com.example.ElectronicGrade.model.Student;
+import com.example.ElectronicGrade.model.entity.Student;
 import com.example.ElectronicGrade.model.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

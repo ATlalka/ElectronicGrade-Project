@@ -1,7 +1,6 @@
 package com.example.ElectronicGrade.model.service;
 
-import com.example.ElectronicGrade.model.Class;
-import com.example.ElectronicGrade.model.Student;
+import com.example.ElectronicGrade.model.entity.Student;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

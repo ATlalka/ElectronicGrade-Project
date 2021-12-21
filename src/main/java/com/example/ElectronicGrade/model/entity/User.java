@@ -1,4 +1,4 @@
-package com.example.ElectronicGrade.model;
+package com.example.ElectronicGrade.model.entity;
 
 import javax.persistence.*;
 
@@ -6,6 +6,8 @@ import javax.persistence.*;
 @Table(name = "uzytkownicy")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User {
+
+    private static final String ROLE = "STUDENT";
 
     @Id
     @GeneratedValue
@@ -23,4 +25,5 @@ public abstract class User {
     @JoinColumn(name = "OsobyidOsoba", referencedColumnName = "idOsoba")
     private Person person;
 
+    public abstract String getRole();
 }

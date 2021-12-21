@@ -1,4 +1,4 @@
-package com.example.ElectronicGrade.model;
+package com.example.ElectronicGrade.model.entity;
 
 import javax.persistence.*;
 
@@ -11,10 +11,10 @@ public class LoginData {
     @Column(name = "idDaneLogowania")
     private Long id;
 
-    @Column(name = "login")
+    @Column(name = "login", nullable = false, unique = true)
     private String login;
 
-    @Column(name = "haslo")
-    private String haslo;
+    @Column(name = "haslo", nullable = false, length = 64)
+    private String password;
 
 }

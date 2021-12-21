@@ -13,7 +13,7 @@ CREATE TABLE Oceny (idOcena int(10) NOT NULL AUTO_INCREMENT, UczniowieidUczen in
 CREATE TABLE Adresy (idAdres int(10) NOT NULL AUTO_INCREMENT, Ulica varchar(50), NumerDomu varchar(6) NOT NULL, NumerMieszkania varchar(5), Miejscowosc varchar(50) NOT NULL, KodPocztowy char(6) NOT NULL, PRIMARY KEY (idAdres)) CHARACTER SET UTF8;
 CREATE TABLE Specjalnosci (idSpecjalnosc int(10) NOT NULL AUTO_INCREMENT, PrzedmiotyidPrzedmiot int(10) NOT NULL, NauczycieleidNauczyciel int(10) NOT NULL, PRIMARY KEY (idSpecjalnosc)) CHARACTER SET UTF8;
 CREATE TABLE Rozszerzenia (idRozszerzenie int(10) NOT NULL AUTO_INCREMENT, KlasyidKlasa int(10) NOT NULL, PrzedmiotyidPrzedmiot int(10) NOT NULL, PRIMARY KEY (idRozszerzenie)) CHARACTER SET UTF8;
-CREATE TABLE DaneLogowania (idDaneLogowania int(10) NOT NULL AUTO_INCREMENT, Login varchar(63) NOT NULL UNIQUE, Haslo char(32) NOT NULL, PRIMARY KEY (idDaneLogowania)) CHARACTER SET UTF8;
+CREATE TABLE DaneLogowania (idDaneLogowania int(10) NOT NULL AUTO_INCREMENT, Login varchar(63) NOT NULL UNIQUE, Haslo char(64) NOT NULL, PRIMARY KEY (idDaneLogowania)) CHARACTER SET UTF8;
 CREATE TABLE Osoby (idOsoba int(10) NOT NULL AUTO_INCREMENT, Imie varchar(31) NOT NULL, DrugieImie varchar(31), Nazwisko varchar(63) NOT NULL, PESEL bigint NOT NULL UNIQUE, DataUrodzenia date NOT NULL, Plec char(1) NOT NULL, AdresyidAdres int(10) NOT NULL, PRIMARY KEY (idOsoba), CHECK (Plec IN ('K','M') AND Pesel > 9999999999 AND Pesel < 100000000000)) CHARACTER SET UTF8;
 
 
