@@ -15,4 +15,12 @@ public abstract class User {
     @Column(name = "email")
     private String email;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "DaneLogowaniaidDaneLogowania", referencedColumnName = "idDaneLogowania")
+    private LoginData loginData;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "OsobyidOsoba", referencedColumnName = "idOsoba")
+    private Person person;
+
 }
