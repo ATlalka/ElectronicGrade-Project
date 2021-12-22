@@ -2,16 +2,24 @@ package com.example.ElectronicGrade.views;
 
 import com.example.ElectronicGrade.views.about.AboutView;
 import com.example.ElectronicGrade.views.helloworld.HelloWorldView;
-import com.example.ElectronicGrade.views.login.LoginView;
+import com.example.ElectronicGrade.views.login.LoginForm;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.Footer;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.html.ListItem;
+import com.vaadin.flow.component.html.Nav;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +28,7 @@ import java.util.List;
  * The main view is a top-level placeholder for other views.
  */
 @PWA(name = "My App", shortName = "My App", enableInstallPrompt = false)
-@Theme(themeFolder = "myapp")
+@Theme(value = Lumo.class, variant = Lumo.DARK)
 @PageTitle("Main")
 public class MainLayout extends AppLayout {
 
@@ -104,9 +112,9 @@ public class MainLayout extends AppLayout {
         MenuItemInfo[] menuItems = new MenuItemInfo[]{ //
                 new MenuItemInfo("Hello World", "la la-globe", HelloWorldView.class), //
 
-                new MenuItemInfo("About2", "la la-file", AboutView.class), //
+                new MenuItemInfo("About", "la la-file", AboutView.class), //
 
-                new MenuItemInfo("Login","la la-file", LoginView.class)
+                new MenuItemInfo("Log In","la la-file", LoginForm.class)
 
         };
         List<RouterLink> links = new ArrayList<>();
