@@ -1,9 +1,9 @@
 package com.example.ElectronicGrade.model.entity.users;
 
 import com.example.ElectronicGrade.model.entity.Grade;
-import com.example.ElectronicGrade.model.entity.User;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -19,7 +19,7 @@ public class Student extends User {
     }
 
     @Override
-    public Role getRole() {
-        return Role.STUDENT;
+    public Collection<Role> getRoles() {
+        return List.of(Role.STUDENT);
     }
 }
