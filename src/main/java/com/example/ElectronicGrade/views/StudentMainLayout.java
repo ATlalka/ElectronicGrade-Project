@@ -4,6 +4,7 @@ import com.example.ElectronicGrade.security.SecurityService;
 import com.example.ElectronicGrade.views.about.AboutView;
 import com.example.ElectronicGrade.views.helloworld.OcenyView;
 import com.example.ElectronicGrade.views.login.LoginForm;
+import com.example.ElectronicGrade.views.teacherOcenyView.teacherOcenyView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;

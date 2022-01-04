@@ -12,7 +12,7 @@ import java.util.List;
 
 @PageTitle("Oceny")
 @Route(value = "oceny", layout = StudentMainLayout.class)
-@RouteAlias(value = "", layout = StudentMainLayout.class)
+//@RouteAlias(value = "", layout = StudentMainLayout.class)
 public class OcenyView extends HorizontalLayout {
 
     public OcenyView() {

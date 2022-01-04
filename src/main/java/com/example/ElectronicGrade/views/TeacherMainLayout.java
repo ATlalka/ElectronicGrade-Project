@@ -4,6 +4,7 @@ import com.example.ElectronicGrade.security.SecurityService;
 import com.example.ElectronicGrade.views.about.AboutView;
 import com.example.ElectronicGrade.views.helloworld.OcenyView;
 import com.example.ElectronicGrade.views.login.LoginForm;
+import com.example.ElectronicGrade.views.teacherOcenyView.teacherOcenyView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -20,14 +21,11 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The main view is a top-level placeholder for other views.
- */
-@PWA(name = "My App", shortName = "My App", enableInstallPrompt = false)
+//@PWA(name = "My App", shortName = "My App", enableInstallPrompt = false)
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @PageTitle("Main")
-public class TeacherMainLayout extends AppLayout {
 
+public class TeacherMainLayout extends AppLayout {
     private final SecurityService securityService;
     public static class MenuItemInfo {
 
@@ -115,10 +113,7 @@ public class TeacherMainLayout extends AppLayout {
 
     private List<RouterLink> createLinks() {
         MenuItemInfo[] menuItems = new MenuItemInfo[]{ //
-                new MenuItemInfo("Oceny", "la la-globe", OcenyView.class), //
-                new MenuItemInfo("Log In", "la la-globe", LoginForm.class),
-                new MenuItemInfo("About", "la la-file", AboutView.class), //
-
+                new MenuItemInfo("Oceny", "la la-globe", teacherOcenyView.class), //
 
         };
         List<RouterLink> links = new ArrayList<>();
@@ -164,5 +159,7 @@ public class TeacherMainLayout extends AppLayout {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
         return title == null ? "" : title.value();
     }
-
 }
+
+
+
