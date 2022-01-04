@@ -1,5 +1,7 @@
 package com.example.ElectronicGrade.model.entity;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import javax.persistence.*;
 
 @Entity
@@ -23,6 +25,10 @@ public class LoginData {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getEncryptedPassword() {
+        return new BCryptPasswordEncoder().encode(password);
     }
 
 }

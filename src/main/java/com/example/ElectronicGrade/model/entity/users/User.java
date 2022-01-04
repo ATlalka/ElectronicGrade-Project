@@ -33,6 +33,10 @@ public abstract class User implements UserDetails {
 
     public abstract Collection<Role> getRoles();
 
+    public LoginData getLoginData() {
+        return loginData;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
@@ -40,7 +44,7 @@ public abstract class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return loginData.getPassword();
+        return loginData.getEncryptedPassword();
     }
 
     @Override

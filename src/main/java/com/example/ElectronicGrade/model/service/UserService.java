@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -28,16 +26,10 @@ public class UserService implements UserDetailsService {
             user = teacherRepository.findByUsername(username);
         }
 
-        org.springframework.security.core.userdetails.User.UserBuilder builder = null;
-        if (user != null) {
-            builder = org.springframework.security.core.userdetails.User.withUsername(username);
-            builder.password(new BCryptPasswordEncoder().encode(user.getPassword()));
-            builder.roles(user.getRoles().stream().map(Enum::name).collect(Collectors.joining()));
-        } else {
+        if (user == null) {
             throw new UsernameNotFoundException("User not found.");
         }
-
-        return builder.build();
+        return user;
     }
 
 }
