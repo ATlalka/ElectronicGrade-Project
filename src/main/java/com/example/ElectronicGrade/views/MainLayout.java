@@ -1,20 +1,13 @@
 package com.example.ElectronicGrade.views;
 
 import com.example.ElectronicGrade.views.about.AboutView;
-import com.example.ElectronicGrade.views.helloworld.HelloWorldView;
+import com.example.ElectronicGrade.views.helloworld.OcenyView;
 import com.example.ElectronicGrade.views.login.LoginForm;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Footer;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Header;
-import com.vaadin.flow.component.html.ListItem;
-import com.vaadin.flow.component.html.Nav;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
@@ -67,6 +60,8 @@ public class MainLayout extends AppLayout {
     }
 
     private Component createHeaderContent() {
+
+
         DrawerToggle toggle = new DrawerToggle();
         toggle.addClassName("text-secondary");
         toggle.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
@@ -82,10 +77,13 @@ public class MainLayout extends AppLayout {
     }
 
     private Component createDrawerContent() {
-        H2 appName = new H2("My App");
+        H2 appName = new H2("Witaj");
+        Label userName = new Label("Imie i Nazwisko"); //TODO metoda getText, ktora bedzie zwracala stringa zawierajacego imie i nazwisko uzytkownika
+        Label className =  new Label("Klasa 3A"); //TODO metoda zwracajaca stringa "KLASA + SYMBOL" np KLASA 3A
+        Label classExtension =  new Label("Matematyka x Fizka x Informatyka "); //TODO metoda zwracajaca string "ROZSZERZENIE X ROZSZERZENIE"
         appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
 
-        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName,
+        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName, userName, className, classExtension,
                 createNavigation(), createFooter());
         section.addClassNames("flex", "flex-col", "items-stretch", "max-h-full", "min-h-full");
         return section;
@@ -110,11 +108,10 @@ public class MainLayout extends AppLayout {
 
     private List<RouterLink> createLinks() {
         MenuItemInfo[] menuItems = new MenuItemInfo[]{ //
-                new MenuItemInfo("Hello World", "la la-globe", HelloWorldView.class), //
-
+                new MenuItemInfo("Oceny", "la la-globe", OcenyView.class), //
+                new MenuItemInfo("Log In", "la la-globe", LoginForm.class),
                 new MenuItemInfo("About", "la la-file", AboutView.class), //
 
-                new MenuItemInfo("Log In","la la-file", LoginForm.class)
 
         };
         List<RouterLink> links = new ArrayList<>();
@@ -131,7 +128,7 @@ public class MainLayout extends AppLayout {
         link.setRoute(menuItemInfo.getView());
 
         Span icon = new Span();
-        icon.addClassNames("me-s", "text-l");
+        icon.addClassNames("me-s", "text-m");
         if (!menuItemInfo.getIconClass().isEmpty()) {
             icon.addClassNames(menuItemInfo.getIconClass());
         }
@@ -160,4 +157,5 @@ public class MainLayout extends AppLayout {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
         return title == null ? "" : title.value();
     }
+
 }
