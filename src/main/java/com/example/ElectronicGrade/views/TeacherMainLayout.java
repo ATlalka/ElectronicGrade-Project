@@ -1,13 +1,16 @@
 package com.example.ElectronicGrade.views;
 
+import com.example.ElectronicGrade.security.SecurityService;
 import com.example.ElectronicGrade.views.about.AboutView;
 import com.example.ElectronicGrade.views.helloworld.OcenyView;
 import com.example.ElectronicGrade.views.login.LoginForm;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
@@ -23,8 +26,9 @@ import java.util.List;
 @PWA(name = "My App", shortName = "My App", enableInstallPrompt = false)
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @PageTitle("Main")
-public class MainLayout extends AppLayout {
+public class TeacherMainLayout extends AppLayout {
 
+    private final SecurityService securityService;
     public static class MenuItemInfo {
 
         private String text;
@@ -53,24 +57,27 @@ public class MainLayout extends AppLayout {
 
     private H1 viewTitle;
 
-    public MainLayout() {
+    public TeacherMainLayout(SecurityService securityService) {
+        this.securityService = securityService;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         addToDrawer(createDrawerContent());
     }
 
     private Component createHeaderContent() {
-
-
+        Button logout = new Button ("Log Out", e->securityService.logout());
+        logout.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         DrawerToggle toggle = new DrawerToggle();
         toggle.addClassName("text-secondary");
         toggle.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         toggle.getElement().setAttribute("aria-label", "Menu toggle");
 
         viewTitle = new H1();
-        viewTitle.addClassNames("m-0", "text-l");
+        viewTitle.addClassNames("m-0", "text-s");
 
-        Header header = new Header(toggle, viewTitle);
+        HorizontalLayout header = new HorizontalLayout(toggle, viewTitle, logout);
+        header.expand(viewTitle);
+        header.setWidth("100%");
         header.addClassNames("bg-base", "border-b", "border-contrast-10", "box-border", "flex", "h-xl", "items-center",
                 "w-full");
         return header;

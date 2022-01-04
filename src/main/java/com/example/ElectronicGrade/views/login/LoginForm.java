@@ -1,26 +1,25 @@
 package com.example.ElectronicGrade.views.login;
 
-import com.example.ElectronicGrade.views.MainLayout;
+import com.example.ElectronicGrade.views.StudentMainLayout;
 import com.vaadin.flow.component.Composite;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.login.LoginOverlay;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 
 
 @PageTitle("Log In")
-@Route(value = "logIn", layout = MainLayout.class)
-public class LoginForm extends Composite<LoginOverlay> {
-
+@Route(value = "login", layout = StudentMainLayout.class)
+public class LoginForm extends Composite<LoginOverlay> implements BeforeEnterObserver {
+    private final LoginOverlay loginOverlay = getContent();
     public LoginForm(){
 
-        LoginOverlay loginOverlay = getContent();
+
         loginOverlay.setTitle("Dziennik Elektroniczny");
         loginOverlay.setDescription("Akademckie Liceum Ogólnokształcące\n" +
                 "Politechniki Wrocławskiej");
         loginOverlay.setOpened(true);
+        loginOverlay.setAction("login");
 
+        /*
         loginOverlay.addLoginListener(loginEvent -> {
             //LOGIN ACTION - VERIFICATION ETC
 
@@ -35,8 +34,18 @@ public class LoginForm extends Composite<LoginOverlay> {
                 Notification.show("Podany login jest niepoprawny");
         });
 
+         */
+
         loginOverlay.setForgotPasswordButtonVisible(false);
 
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+
+        if(beforeEnterEvent.getLocation().getQueryParameters().getParameters().containsKey("error")){
+            loginOverlay.setError(true);
+        }
     }
 }
 

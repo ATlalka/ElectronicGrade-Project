@@ -1,6 +1,6 @@
 package com.example.ElectronicGrade.views.about;
 
-import com.example.ElectronicGrade.views.MainLayout;
+import com.example.ElectronicGrade.views.StudentMainLayout;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
@@ -9,7 +9,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 @PageTitle("About")
-@Route(value = "about", layout = MainLayout.class)
+@Route(value = "about", layout = StudentMainLayout.class)
 public class AboutView extends VerticalLayout {
 
     public AboutView() {
