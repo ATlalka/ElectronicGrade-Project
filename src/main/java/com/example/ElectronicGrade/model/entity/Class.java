@@ -27,7 +27,33 @@ public class Class {
     @JoinColumn(name = "KlasyidKlasa", referencedColumnName = "idKlasa")
     private List<Student> students;
 
+    @ManyToMany
+    @JoinTable(
+            name = "Rozszerzenia",
+            joinColumns = { @JoinColumn(name = "KlasyidKlasa", referencedColumnName = "idKlasa") },
+            inverseJoinColumns = { @JoinColumn(name = "PrzedmiotyidPrzedmiot", referencedColumnName = "idPrzedmiot") }
+    )
+    private List<Subject> extensions;
+
     public List<Student> getStudents() {
         return students;
     }
+
+    public List<Subject> getExtensions() {
+        return extensions;
+    }
+
+    @Override
+    public String toString() {
+        return grade.toString() + symbol;
+    }
+
+    public String getExtensionsNames() {
+        String result = "Rozszerzenia: ";
+        for (Subject subject : extensions) {
+            result += subject.getName() + ", ";
+        }
+        return result;
+    }
+
 }

@@ -2,6 +2,9 @@ package com.example.ElectronicGrade.views;
 
 import com.example.ElectronicGrade.model.entity.users.Student;
 import com.example.ElectronicGrade.model.entity.users.User;
+import com.example.ElectronicGrade.model.repository.StudentRepository;
+import com.example.ElectronicGrade.model.service.StudentService;
+import com.example.ElectronicGrade.model.service.UserService;
 import com.example.ElectronicGrade.security.SecurityService;
 import com.example.ElectronicGrade.views.helloworld.OcenyView;
 import com.vaadin.flow.component.Component;
@@ -16,7 +19,6 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +32,6 @@ import java.util.List;
 public class StudentMainLayout extends AppLayout {
 
     private final SecurityService securityService;
-    private final Student user;
 
     public static class MenuItemInfo {
 
@@ -62,7 +63,6 @@ public class StudentMainLayout extends AppLayout {
 
     public StudentMainLayout(SecurityService securityService) {
         this.securityService = securityService;
-        this.user = (Student) securityService.getAuthenticatedUser();
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         addToDrawer(createDrawerContent());
@@ -88,15 +88,23 @@ public class StudentMainLayout extends AppLayout {
     }
 
     private Component createDrawerContent() {
-        H2 appName = new H2("Witaj");
-        Label userName = new Label(user != null ? user.getName() : "unknown" ); //TODO metoda getText, ktora bedzie zwracala stringa zawierajacego imie i nazwisko uzytkownika
-        Label className =  new Label("Klasa 3A"); //TODO metoda zwracajaca stringa "KLASA + SYMBOL" np KLASA 3A
-        Label classExtension =  new Label("Matematyka x Fizka x Informatyka "); //TODO metoda zwracajaca string "ROZSZERZENIE X ROZSZERZENIE"
-        appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
+        com.vaadin.flow.component.html.Section section = null;
+        Student user = (Student) securityService.getAuthenticatedUser();
+        if (user != null) {
+            H2 appName = new H2("Witaj");
+            Label userName = new Label(user.getName());
+            Label className = new Label(user.getStudentClass().toString());
+            Label classExtension = new Label(user.getStudentClass().getExtensionsNames());
+            appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
+            section = new com.vaadin.flow.component.html.Section(appName, userName, className, classExtension,
+                    createNavigation(), createFooter());
+            section.addClassNames("flex", "flex-col", "items-stretch", "max-h-full", "min-h-full");
 
-        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName, userName, className, classExtension,
-                createNavigation(), createFooter());
-        section.addClassNames("flex", "flex-col", "items-stretch", "max-h-full", "min-h-full");
+        } else {
+            section = new com.vaadin.flow.component.html.Section(createNavigation(), createFooter());
+            section.addClassNames("flex", "flex-col", "items-stretch", "max-h-full", "min-h-full");
+
+        }
         return section;
     }
 

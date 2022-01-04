@@ -14,5 +14,8 @@ public class Subject {
     @Column (name = "nazwa")
     private String name;
 
-    // TO DO: przedmioty z zajęciami
+    public String getName() {
+        return name;
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.ElectronicGrade.model.entity.users;
 
 import com.example.ElectronicGrade.model.entity.Grade;
+import com.example.ElectronicGrade.model.entity.Class;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -14,6 +15,10 @@ public class Student extends User {
     @JoinColumn(name = "UczniowieidUczen", referencedColumnName = "idUzytkownik")
     private List<Grade> grades;
 
+    @ManyToOne
+    @JoinColumn(name = "KlasyidKlasa", referencedColumnName = "idKlasa")
+    private Class studentClass;
+
     public List<Grade> getGrades() {
         return grades;
     }
@@ -21,5 +26,10 @@ public class Student extends User {
     @Override
     public Collection<Role> getRoles() {
         return List.of(Role.STUDENT);
+    }
+
+    @OneToMany(fetch = FetchType.LAZY)
+    public Class getStudentClass() {
+        return studentClass;
     }
 }
