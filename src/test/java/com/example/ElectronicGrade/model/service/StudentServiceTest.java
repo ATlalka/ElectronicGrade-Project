@@ -1,6 +1,6 @@
 package com.example.ElectronicGrade.model.service;
 
-import com.example.ElectronicGrade.model.entity.Student;
+import com.example.ElectronicGrade.model.entity.users.Student;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

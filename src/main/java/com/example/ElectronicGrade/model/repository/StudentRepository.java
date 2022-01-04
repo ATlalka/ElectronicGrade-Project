@@ -1,6 +1,6 @@
 package com.example.ElectronicGrade.model.repository;
 
-import com.example.ElectronicGrade.model.entity.Student;
+import com.example.ElectronicGrade.model.entity.users.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

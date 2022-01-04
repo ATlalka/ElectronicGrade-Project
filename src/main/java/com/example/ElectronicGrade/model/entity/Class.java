@@ -1,5 +1,7 @@
 package com.example.ElectronicGrade.model.entity;
 
+import com.example.ElectronicGrade.model.entity.users.Student;
+
 import javax.persistence.*;
 import java.util.List;
 

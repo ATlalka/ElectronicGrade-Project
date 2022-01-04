@@ -1,4 +1,7 @@
-package com.example.ElectronicGrade.model.entity;
+package com.example.ElectronicGrade.model.entity.users;
+
+import com.example.ElectronicGrade.model.entity.Grade;
+import com.example.ElectronicGrade.model.entity.User;
 
 import javax.persistence.*;
 import java.util.List;
@@ -6,8 +9,6 @@ import java.util.List;
 @Entity
 @Table(name = "Uczniowie")
 public class Student extends User {
-
-    private static final String ROLE = "STUDENT";
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "UczniowieidUczen", referencedColumnName = "idUzytkownik")
@@ -18,7 +19,7 @@ public class Student extends User {
     }
 
     @Override
-    public String getRole() {
-        return ROLE;
+    public Role getRole() {
+        return Role.STUDENT;
     }
 }

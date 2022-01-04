@@ -1,5 +1,7 @@
 package com.example.ElectronicGrade.model.entity;
 
+import com.example.ElectronicGrade.model.entity.users.Role;
+
 import javax.persistence.*;
 
 @Entity
@@ -25,5 +27,5 @@ public abstract class User {
     @JoinColumn(name = "OsobyidOsoba", referencedColumnName = "idOsoba")
     private Person person;
 
-    public abstract String getRole();
+    public abstract Role getRole();
 }

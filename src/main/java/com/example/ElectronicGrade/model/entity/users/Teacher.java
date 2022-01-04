@@ -1,12 +1,13 @@
-package com.example.ElectronicGrade.model.entity;
+package com.example.ElectronicGrade.model.entity.users;
+
+import com.example.ElectronicGrade.model.entity.Class;
+import com.example.ElectronicGrade.model.entity.User;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Nauczyciele")
 public class Teacher extends User {
-
-    private static final String ROLE = "TEACHER";
 
     @Column(name="TytulNaukowy")
     private String degree;
@@ -19,8 +20,8 @@ public class Teacher extends User {
     private Class onesClass;
 
     @Override
-    public String getRole() {
-        return ROLE;
+    public Role getRole() {
+        return Role.TEACHER;
     }
 
 }
