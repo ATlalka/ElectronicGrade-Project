@@ -17,4 +17,12 @@ public class LoginData {
     @Column(name = "haslo", nullable = false, length = 64)
     private String password;
 
+    public String getLogin() {
+        return login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
 }

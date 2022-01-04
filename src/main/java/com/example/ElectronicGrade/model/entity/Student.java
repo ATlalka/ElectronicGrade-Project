@@ -7,7 +7,7 @@ import java.util.List;
 @Table(name = "Uczniowie")
 public class Student extends User {
 
-    private static final String ROLE = "TEACHER";
+    private static final String ROLE = "STUDENT";
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "UczniowieidUczen", referencedColumnName = "idUzytkownik")
