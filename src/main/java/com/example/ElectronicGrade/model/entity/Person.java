@@ -23,5 +23,12 @@ public class Person {
 
     @Column(name = "dataUrodzenia")
     private Date birthdayDate;
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
 }

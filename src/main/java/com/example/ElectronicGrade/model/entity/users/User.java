@@ -37,6 +37,14 @@ public abstract class User implements UserDetails {
         return loginData;
     }
 
+    public Person getPerson() {
+        return person;
+    }
+
+    public String getName() {
+        return person.getName() + " " + person.getSurname();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
