@@ -10,7 +10,7 @@ import com.vaadin.flow.router.Route;
 
 
 @PageTitle("Log In")
-@Route(value = "Log In", layout = MainLayout.class)
+@Route(value = "logIn", layout = MainLayout.class)
 public class LoginForm extends Composite<LoginOverlay> {
 
     public LoginForm(){
