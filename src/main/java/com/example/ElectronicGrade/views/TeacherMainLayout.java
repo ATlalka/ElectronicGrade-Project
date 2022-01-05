@@ -27,10 +27,10 @@ import java.util.List;
 
 public class TeacherMainLayout extends AppLayout {
     private final SecurityService securityService;
-    public static class MenuItemInfo {
+        public static class MenuItemInfo {
 
         private String text;
-        private String iconClass;
+            private String iconClass;
         private Class<? extends Component> view;
 
         public MenuItemInfo(String text, String iconClass, Class<? extends Component> view) {

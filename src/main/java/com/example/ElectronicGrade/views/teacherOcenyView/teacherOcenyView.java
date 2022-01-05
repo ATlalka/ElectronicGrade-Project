@@ -47,6 +47,9 @@ public class teacherOcenyView  extends VerticalLayout {
         uczniowie2A.sort(Comparator.comparing(Uczen::getNazwisko));
 
         //TODO przy tworzeniu klasy rok i symbol trzeba laczyc w jednego stringa robimy liste klas, ktore spelniaja warunki z ComboBoxa
+        //TODO lista klasy zawiera te klasy, ktorych uczy dany nauczyciel (symbole)
+        //TODO lista przedmioty zawiera te przedmioty, ktorych nauczyciel uczy klase wybrana z Combo Boxa
+        //TODO rekordy - zawieraja uczniow danej klasy i ich oceny z danego przedmiotu
         Klasa klasa1A = new Klasa("1A", uczniowie1A);
         Klasa klasa2A = new Klasa("2A", uczniowie2A);
 
