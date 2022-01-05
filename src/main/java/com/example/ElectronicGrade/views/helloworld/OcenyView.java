@@ -1,5 +1,7 @@
 package com.example.ElectronicGrade.views.helloworld;
 
+import com.example.ElectronicGrade.model.entity.users.Student;
+import com.example.ElectronicGrade.security.SecurityService;
 import com.example.ElectronicGrade.views.StudentMainLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -15,8 +17,10 @@ import java.util.List;
 @RouteAlias(value = "", layout = StudentMainLayout.class)
 public class OcenyView extends HorizontalLayout {
 
-    public OcenyView() {
+    private final Student student;
 
+    public OcenyView(SecurityService securityService) {
+        this.student = (Student) securityService.getAuthenticatedUser();
         setMargin(true);
         //setVerticalComponentAlignment(Alignment.END, name, sayHello);
 
