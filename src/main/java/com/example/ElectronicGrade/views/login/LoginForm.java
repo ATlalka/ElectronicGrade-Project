@@ -1,13 +1,13 @@
 package com.example.ElectronicGrade.views.login;
 
-import com.example.ElectronicGrade.views.StudentMainLayout;
+import com.example.ElectronicGrade.views.MainLayout;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.router.*;
 
 
 @PageTitle("Log In")
-@Route(value = "login", layout = StudentMainLayout.class)
+@Route(value = "login", layout = MainLayout.class)
 public class LoginForm extends Composite<LoginOverlay> implements BeforeEnterObserver {
     private final LoginOverlay loginOverlay = getContent();
     public LoginForm(){

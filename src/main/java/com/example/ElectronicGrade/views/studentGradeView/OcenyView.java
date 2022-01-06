@@ -1,18 +1,16 @@
-package com.example.ElectronicGrade.views.helloworld;
+package com.example.ElectronicGrade.views.studentGradeView;
 
-import com.example.ElectronicGrade.views.StudentMainLayout;
+import com.example.ElectronicGrade.views.MainLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
 
 import java.util.Arrays;
 import java.util.List;
 
 @PageTitle("Oceny")
-@Route(value = "oceny", layout = StudentMainLayout.class)
-@RouteAlias(value = "", layout = StudentMainLayout.class)
+@Route(value = "oceny", layout = MainLayout.class)
 public class OcenyView extends HorizontalLayout {
 
     public OcenyView() {

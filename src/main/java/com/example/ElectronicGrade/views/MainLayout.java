@@ -1,9 +1,11 @@
 package com.example.ElectronicGrade.views;
 
+import com.example.ElectronicGrade.model.entity.users.Role;
+import com.example.ElectronicGrade.model.entity.users.Student;
+import com.example.ElectronicGrade.model.entity.users.User;
 import com.example.ElectronicGrade.security.SecurityService;
-import com.example.ElectronicGrade.views.about.AboutView;
-import com.example.ElectronicGrade.views.helloworld.OcenyView;
-import com.example.ElectronicGrade.views.login.LoginForm;
+import com.example.ElectronicGrade.views.studentGradeView.OcenyView;
+import com.example.ElectronicGrade.views.teacherGradeView.TeacherGradesView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -11,7 +13,9 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
@@ -26,7 +30,8 @@ import java.util.List;
 @PWA(name = "My App", shortName = "My App", enableInstallPrompt = false)
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @PageTitle("Main")
-public class TeacherMainLayout extends AppLayout {
+@Route("")
+public class MainLayout extends AppLayout {
 
     private final SecurityService securityService;
     public static class MenuItemInfo {
@@ -57,7 +62,7 @@ public class TeacherMainLayout extends AppLayout {
 
     private H1 viewTitle;
 
-    public TeacherMainLayout(SecurityService securityService) {
+    public MainLayout(SecurityService securityService) {
         this.securityService = securityService;
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
@@ -84,15 +89,36 @@ public class TeacherMainLayout extends AppLayout {
     }
 
     private Component createDrawerContent() {
-        H2 appName = new H2("Witaj");
-        Label userName = new Label("Imie i Nazwisko"); //TODO metoda getText, ktora bedzie zwracala stringa zawierajacego imie i nazwisko uzytkownika
-        Label className =  new Label("Klasa 3A"); //TODO metoda zwracajaca stringa "KLASA + SYMBOL" np KLASA 3A
-        Label classExtension =  new Label("Matematyka x Fizka x Informatyka "); //TODO metoda zwracajaca string "ROZSZERZENIE X ROZSZERZENIE"
-        appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
+        com.vaadin.flow.component.html.Section section = null;
+        User user = (User) securityService.getAuthenticatedUser();
 
-        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName, userName, className, classExtension,
-                createNavigation(), createFooter());
-        section.addClassNames("flex", "flex-col", "items-stretch", "max-h-full", "min-h-full");
+        if(user!= null){
+            H2 appName = new H2("Witaj");
+            Label userName = new Label(user.getName());
+            VerticalLayout verticalLayout = new VerticalLayout();
+            if(user.getRoles().contains(Role.STUDENT))
+            {
+                Student studentUser = (Student) securityService.getAuthenticatedUser();
+                Label className = new Label(studentUser.getStudentClass().toString());
+                Label classExtension = new Label(studentUser.getStudentClass().getExtensionsNames());
+                verticalLayout.add(appName, userName, className, classExtension);
+                section = new com.vaadin.flow.component.html.Section(verticalLayout,
+                        createNavigation(), createFooter());
+                section.addClassNames("flex", "flex-col", "items-stretch", "max-h-full", "min-h-full");
+            }
+            if(user.getRoles().contains(Role.TEACHER))
+            {
+                verticalLayout.add(appName, userName);
+                section =  new com.vaadin.flow.component.html.Section(verticalLayout,
+                        createNavigation(), createFooter());
+                section.addClassNames("flex", "flex-col", "items-stretch", "max-h-full", "min-h-full");
+            }
+        }
+        else {
+            section = new com.vaadin.flow.component.html.Section(createNavigation(), createFooter());
+            section.addClassNames("flex", "flex-col", "items-stretch", "max-h-full", "min-h-full");
+
+        }
         return section;
     }
 
@@ -106,20 +132,41 @@ public class TeacherMainLayout extends AppLayout {
         list.addClassNames("list-none", "m-0", "p-0");
         nav.add(list);
 
-        for (RouterLink link : createLinks()) {
-            ListItem item = new ListItem(link);
-            list.add(item);
+        User user = (User) securityService.getAuthenticatedUser();
+        if(user!= null){
+            if(user.getRoles().contains(Role.STUDENT)) {
+                for (RouterLink link : createStudentLinks()) {
+                    ListItem item = new ListItem(link);
+                    list.add(item);
+                }
+            }
+            else
+            {
+                for (RouterLink link : createTeacherLinks()) {
+                    ListItem item = new ListItem(link);
+                    list.add(item);
+                }
+            }
         }
+
         return nav;
     }
 
-    private List<RouterLink> createLinks() {
+    private List<RouterLink> createStudentLinks() {
         MenuItemInfo[] menuItems = new MenuItemInfo[]{ //
                 new MenuItemInfo("Oceny", "la la-globe", OcenyView.class), //
-                new MenuItemInfo("Log In", "la la-globe", LoginForm.class),
-                new MenuItemInfo("About", "la la-file", AboutView.class), //
+        };
+        List<RouterLink> links = new ArrayList<>();
+        for (MenuItemInfo menuItemInfo : menuItems) {
+            links.add(createLink(menuItemInfo));
 
+        }
+        return links;
+    }
 
+    private List<RouterLink> createTeacherLinks() {
+        MenuItemInfo[] menuItems = new MenuItemInfo[]{ //
+                new MenuItemInfo("Oceny", "la la-globe", TeacherGradesView.class), //
         };
         List<RouterLink> links = new ArrayList<>();
         for (MenuItemInfo menuItemInfo : menuItems) {

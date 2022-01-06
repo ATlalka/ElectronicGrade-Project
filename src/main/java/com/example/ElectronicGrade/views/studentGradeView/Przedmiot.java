@@ -1,4 +1,4 @@
-package com.example.ElectronicGrade.views.helloworld;
+package com.example.ElectronicGrade.views.studentGradeView;
 
 import java.util.List;
 
