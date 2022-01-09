@@ -19,4 +19,12 @@ public class Grade {
 
     @Column(name = "komentarz")
     private String desc;
+
+    @ManyToOne
+    @JoinColumn(name = "lekcjeidLekcja", referencedColumnName = "idLekcja")
+    private Lesson lesson;
+
+    public Lesson getLesson() {
+        return lesson;
+    }
 }

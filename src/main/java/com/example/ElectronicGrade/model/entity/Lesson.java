@@ -19,12 +19,11 @@ public class Lesson {
     @Column (name = "data")
     private Date date;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "LekcjeidLekcja", referencedColumnName = "idLekcja")
-    private List<Grade> grades;
+    @ManyToOne
+    @JoinColumn(name = "zajeciaidZajecia", referencedColumnName = "idZajecia")
+    private Course course;
 
-    public List<Grade> getGrades() {
-        return grades;
+    public Course getCourse() {
+        return course;
     }
-
 }

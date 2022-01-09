@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table (name = "Zajecia")
-public class TimeTable {
+public class Course {
 
     @Id
     @GeneratedValue
@@ -22,11 +22,11 @@ public class TimeTable {
     @Column (name = "zarchiwizowana")
     private boolean ifArchived;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ZajeciaidZajecia", referencedColumnName = "idZajecia")
-    private List<Lesson> lessons;
+    @ManyToOne
+    @JoinColumn(name = "przedmiotyidPrzedmiot", referencedColumnName = "idPrzedmiot")
+    private Subject subject;
 
-    public List<Lesson> getLessons() {
-        return lessons;
+    public Subject getSubject() {
+        return subject;
     }
 }
