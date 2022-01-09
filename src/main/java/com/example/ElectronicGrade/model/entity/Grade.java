@@ -27,4 +27,8 @@ public class Grade {
     public Lesson getLesson() {
         return lesson;
     }
+
+    public Subject getSubject() {
+        return getLesson().getCourse().getSubject();
+    }
 }

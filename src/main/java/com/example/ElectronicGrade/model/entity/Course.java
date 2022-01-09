@@ -19,9 +19,6 @@ public class Course {
     @Column (name = "godzina")
     private Timestamp time;
 
-    @Column (name = "zarchiwizowana")
-    private boolean ifArchived;
-
     @ManyToOne
     @JoinColumn(name = "przedmiotyidPrzedmiot", referencedColumnName = "idPrzedmiot")
     private Subject subject;
