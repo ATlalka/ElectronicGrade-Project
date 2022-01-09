@@ -29,6 +29,7 @@ public class UserService implements UserDetailsService {
         User user = studentRepository.findByUsername(username);
         if (user != null) {
             Hibernate.initialize(((Student) user).getStudentClass().getExtensions());
+            Hibernate.initialize(((Student) user).getGradesMap());
         }
         if (user == null) {
             user = teacherRepository.findByUsername(username);

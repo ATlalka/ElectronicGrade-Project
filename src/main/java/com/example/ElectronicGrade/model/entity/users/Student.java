@@ -5,9 +5,7 @@ import com.example.ElectronicGrade.model.entity.Class;
 import com.example.ElectronicGrade.model.entity.Subject;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 @Table(name = "Uczniowie")
@@ -36,5 +34,16 @@ public class Student extends User {
     @OneToMany(fetch = FetchType.LAZY)
     public Class getStudentClass() {
         return studentClass;
+    }
+
+    public Map<Subject, List<Grade>> getGradesMap() {
+        Map<Subject, List<Grade>> result = new LinkedHashMap<>();
+        for (Grade grade : grades) {
+            if (!result.containsKey(grade.getSubject())) {
+                result.put(grade.getSubject(), new ArrayList<>());
+            }
+            result.get(grade.getSubject()).add(grade);
+        }
+        return result;
     }
 }

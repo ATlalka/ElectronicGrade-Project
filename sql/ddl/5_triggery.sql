@@ -99,7 +99,7 @@ BEGIN
 
 IF (NOT((SELECT Rodzaj
       FROM Obecnosci
-      WHERE idLekcja = NEW.LekcjeidLekcja AND idUzytkownik = NEW.UczniowieidUczen) LIKE 'o' )) THEN
+      WHERE LekcjeidLekcja = NEW.LekcjeidLekcja AND UczniowieidUczen = NEW.UczniowieidUczen) LIKE 'o' )) THEN
 signal sqlstate '45000' set message_text ='Uczen nie moze otrzymac oceny, poniewaz nie byl/jest wtedy obecny.';
 END IF;
 END;/
