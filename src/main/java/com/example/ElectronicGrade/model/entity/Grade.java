@@ -31,4 +31,9 @@ public class Grade {
     public Subject getSubject() {
         return getLesson().getCourse().getSubject();
     }
+
+    @Override
+    public String toString() {
+        return value.toString();
+    }
 }
