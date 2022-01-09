@@ -28,4 +28,9 @@ public class StudentServiceTest {
         Assert.assertTrue("Records unfetched", students.size() > 0);
     }
 
+    @Test
+    public void studentClass() {
+        List<Student> students = studentService.findByClassId(1L);
+        students.get(0);
+    }
 }

@@ -15,12 +15,12 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    @Transactional
-    public void fetch(Student student) {
-        Hibernate.initialize(student.getStudentClass().getExtensions());
-    }
-
     public List<Student> list() {
         return studentRepository.findAll();
     }
+
+    public List<Student> findByClassId(Long idClass) {
+        return studentRepository.findByClassId(idClass);
+    }
+
 }
