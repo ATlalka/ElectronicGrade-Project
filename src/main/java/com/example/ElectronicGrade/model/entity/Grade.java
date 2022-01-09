@@ -6,6 +6,15 @@ import javax.persistence.*;
 @Table(name= "Oceny")
 public class Grade {
 
+    public Grade(Double value, Double weight, String desc, Lesson lesson) {
+        this.value = value;
+        this.weight = weight;
+        this.desc = desc;
+        this.lesson = lesson;
+    }
+
+    public Grade() {}
+
     @Id
     @GeneratedValue
     @Column(name = "idOcena")
