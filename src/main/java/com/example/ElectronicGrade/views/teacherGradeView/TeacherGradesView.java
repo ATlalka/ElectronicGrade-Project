@@ -2,6 +2,7 @@ package com.example.ElectronicGrade.views.teacherGradeView;
 
 import com.example.ElectronicGrade.model.entity.users.Teacher;
 import com.example.ElectronicGrade.model.entity.users.User;
+import com.example.ElectronicGrade.model.service.StudentService;
 import com.example.ElectronicGrade.model.service.TeacherService;
 import com.example.ElectronicGrade.security.SecurityService;
 import com.example.ElectronicGrade.views.MainLayout;
@@ -25,12 +26,15 @@ public class TeacherGradesView extends VerticalLayout {
 
     @Autowired
     private final TeacherService teacherService;
+    @Autowired
+    private final StudentService studentService;
 
     private final Grid <Student> klasaGrid = new Grid<>();
     List<Class> klasy = new ArrayList<>();
 
-    public TeacherGradesView(SecurityService securityService, @Autowired TeacherService teacherService) {
+    public TeacherGradesView(SecurityService securityService, @Autowired TeacherService teacherService, @Autowired StudentService studentService) {
         this.teacherService = teacherService;
+        this.studentService = studentService;
         this.teacher = teacherService.findById(((User) securityService.getAuthenticatedUser()).getId()).orElseThrow();
 
         setMargin(true);
