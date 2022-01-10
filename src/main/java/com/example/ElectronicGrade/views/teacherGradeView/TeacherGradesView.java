@@ -1,6 +1,9 @@
 package com.example.ElectronicGrade.views.teacherGradeView;
 
+import com.example.ElectronicGrade.model.entity.users.Teacher;
+import com.example.ElectronicGrade.model.entity.users.User;
 import com.example.ElectronicGrade.model.service.TeacherService;
+import com.example.ElectronicGrade.security.SecurityService;
 import com.example.ElectronicGrade.views.MainLayout;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
@@ -18,17 +21,17 @@ import java.util.List;
 @Route(value = "nauczycieloceny", layout = MainLayout.class)
 public class TeacherGradesView extends VerticalLayout {
 
+    private final Teacher teacher;
+
     @Autowired
-    private TeacherService teacherService;
-
-    public TeacherGradesView(@Autowired TeacherService teacherService) {
-        this.teacherService = teacherService;
-    }
-
+    private final TeacherService teacherService;
 
     private final Grid <Student> klasaGrid = new Grid<>();
     List<Class> klasy = new ArrayList<>();
-    public TeacherGradesView() {
+
+    public TeacherGradesView(SecurityService securityService, @Autowired TeacherService teacherService) {
+        this.teacherService = teacherService;
+        this.teacher = teacherService.findById(((User) securityService.getAuthenticatedUser()).getId()).orElseThrow();
 
         setMargin(true);
         List<Integer> oceny1 = Arrays.asList(5, 4, 5, 4, 4, 5, 4);
