@@ -1,22 +1,25 @@
 package com.example.ElectronicGrade.model.entity;
 
+import com.example.ElectronicGrade.model.entity.users.Student;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name= "Oceny")
 public class Grade {
 
-    public Grade(Double value, Double weight, String desc, Lesson lesson) {
+    public Grade(Double value, Double weight, String desc, Lesson lesson, Student student) {
         this.value = value;
         this.weight = weight;
         this.desc = desc;
         this.lesson = lesson;
+        this.student = student;
     }
 
     public Grade() {}
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idOcena")
     private Long id;
 
@@ -32,6 +35,10 @@ public class Grade {
     @ManyToOne
     @JoinColumn(name = "lekcjeidLekcja", referencedColumnName = "idLekcja")
     private Lesson lesson;
+
+    @ManyToOne
+    @JoinColumn(name = "uczniowieidUczen", referencedColumnName = "idUzytkownik")
+    private Student student;
 
     public Lesson getLesson() {
         return lesson;

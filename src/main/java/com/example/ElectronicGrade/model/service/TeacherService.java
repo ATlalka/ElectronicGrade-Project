@@ -1,9 +1,7 @@
 package com.example.ElectronicGrade.model.service;
 
-import com.example.ElectronicGrade.model.entity.Course;
+import com.example.ElectronicGrade.model.entity.*;
 import com.example.ElectronicGrade.model.entity.Class;
-import com.example.ElectronicGrade.model.entity.Lesson;
-import com.example.ElectronicGrade.model.entity.Subject;
 import com.example.ElectronicGrade.model.entity.users.Student;
 import com.example.ElectronicGrade.model.entity.users.Teacher;
 import com.example.ElectronicGrade.model.repository.*;
@@ -57,5 +55,9 @@ public class TeacherService {
         }
 
         return result;
+    }
+
+    public void saveGrade(Grade grade) {
+        gradeRepository.save(grade);
     }
 }

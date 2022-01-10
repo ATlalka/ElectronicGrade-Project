@@ -23,13 +23,19 @@ public class TeacherServiceTest {
     @Autowired
     private TeacherService teacherService;
 
+    @Autowired
+    private StudentService studentService;
+
     @Test
     public void findSubjectsByTeacherId() {
         Map subjects = teacherService.findSubjectsByTeacherId(13L);
         subjects.get(0);
 
         List<Lesson> lessons = teacherService.findLessonsBySubjectAndClassId(5L, 2L);
-        lessons.get(0);
+
+        Student student = studentService.findById(1L).get();
+        Grade grade = student.getGrades().get(0);
+
     }
 
 }
