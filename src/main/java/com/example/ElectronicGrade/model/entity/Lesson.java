@@ -16,6 +16,10 @@ public class Lesson {
     @Column (name = "temat")
     private String topic;
 
+    public Date getDate() {
+        return date;
+    }
+
     @Column (name = "data")
     private Date date;
 
