@@ -46,4 +46,14 @@ public class Student extends User {
         }
         return result;
     }
+
+    public List<Grade> getGrades(Subject subject) {
+        List<Grade> result = new ArrayList<>();
+        for (Grade grade : grades) {
+            if (grade.getSubject() == subject) {
+                result.add(grade);
+            }
+        }
+        return result;
+    }
 }

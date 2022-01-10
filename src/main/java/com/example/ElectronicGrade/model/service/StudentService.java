@@ -2,12 +2,11 @@ package com.example.ElectronicGrade.model.service;
 
 import com.example.ElectronicGrade.model.entity.users.Student;
 import com.example.ElectronicGrade.model.repository.StudentRepository;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -23,4 +22,7 @@ public class StudentService {
         return studentRepository.findByClassId(idClass);
     }
 
+    public Optional<Student> findById(Long idStudent) {
+        return studentRepository.findById(idStudent);
+    }
 }

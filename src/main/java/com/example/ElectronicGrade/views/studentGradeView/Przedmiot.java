@@ -1,13 +1,15 @@
 package com.example.ElectronicGrade.views.studentGradeView;
 
+import com.example.ElectronicGrade.model.entity.Grade;
+
 import java.util.List;
 
 public class Przedmiot {
 
     String Nazwa;
-    List<Integer> Oceny;
+    List<Grade> Oceny;
 
-    Przedmiot(String Nazwa, List<Integer> Oceny){
+    Przedmiot(String Nazwa, List<Grade> Oceny){
         this.Nazwa = Nazwa;
         this.Oceny = Oceny;
     }
@@ -16,7 +18,7 @@ public class Przedmiot {
         return Nazwa;
     }
 
-    public List<Integer> getOceny(){
+    public List<Grade> getOceny(){
         return Oceny;
     }
 }
