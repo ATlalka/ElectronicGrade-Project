@@ -1,8 +1,9 @@
 package com.example.ElectronicGrade.model.entity;
 
+import com.example.ElectronicGrade.model.entity.users.Teacher;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
 @Table (name = "Zajecia")
@@ -23,7 +24,19 @@ public class Course {
     @JoinColumn(name = "przedmiotyidPrzedmiot", referencedColumnName = "idPrzedmiot")
     private Subject subject;
 
+    @ManyToOne
+    @JoinColumn(name = "nauczycieleidNauczyciel", referencedColumnName = "idUzytkownik")
+    private Teacher teacher;
+
+    @ManyToOne
+    @JoinColumn(name = "klasyidKlasa", referencedColumnName = "idKlasa")
+    private Class courseClass;
+
     public Subject getSubject() {
         return subject;
+    }
+
+    public Class getCourseClass() {
+        return courseClass;
     }
 }

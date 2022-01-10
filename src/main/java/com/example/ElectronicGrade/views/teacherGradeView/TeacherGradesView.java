@@ -1,11 +1,13 @@
 package com.example.ElectronicGrade.views.teacherGradeView;
 
+import com.example.ElectronicGrade.model.service.TeacherService;
 import com.example.ElectronicGrade.views.MainLayout;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +17,14 @@ import java.util.List;
 @PageTitle("Oceny")
 @Route(value = "nauczycieloceny", layout = MainLayout.class)
 public class TeacherGradesView extends VerticalLayout {
+
+    @Autowired
+    private TeacherService teacherService;
+
+    public TeacherGradesView(@Autowired TeacherService teacherService) {
+        this.teacherService = teacherService;
+    }
+
 
     private final Grid <Student> klasaGrid = new Grid<>();
     List<Class> klasy = new ArrayList<>();

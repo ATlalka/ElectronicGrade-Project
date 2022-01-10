@@ -1,6 +1,7 @@
 package com.example.ElectronicGrade.model.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table (name = "Przedmioty")
@@ -18,4 +19,7 @@ public class Subject {
         return name;
     }
 
+    @OneToMany
+    @JoinColumn(name = "PrzedmiotyidPrzedmiot", referencedColumnName = "idPrzedmiot")
+    private List<Course> courses;
 }
