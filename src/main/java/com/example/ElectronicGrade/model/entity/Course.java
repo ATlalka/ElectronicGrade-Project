@@ -39,4 +39,8 @@ public class Course {
     public Class getCourseClass() {
         return courseClass;
     }
+
+    public String toString() {
+        return subject.getName() + " " + courseClass.toString();
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.ElectronicGrade.model.service;
 
+import com.example.ElectronicGrade.model.entity.Course;
 import com.example.ElectronicGrade.model.entity.Grade;
 import com.example.ElectronicGrade.model.entity.Subject;
 import com.example.ElectronicGrade.model.entity.users.Student;
@@ -23,7 +24,7 @@ public class TeacherServiceTest {
 
     @Test
     public void findSubjectsByTeacherId() {
-        List<Subject> subjects = teacherService.findSubjectsByTeacherId(13L);
+        Map subjects = teacherService.findSubjectsByTeacherId(13L);
         subjects.get(0);
     }
 

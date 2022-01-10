@@ -22,4 +22,8 @@ public class Subject {
     @OneToMany
     @JoinColumn(name = "PrzedmiotyidPrzedmiot", referencedColumnName = "idPrzedmiot")
     private List<Course> courses;
+
+    public List<Course> getCourses() {
+        return courses;
+    }
 }
