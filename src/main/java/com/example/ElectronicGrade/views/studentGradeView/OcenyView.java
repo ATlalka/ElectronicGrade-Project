@@ -3,6 +3,8 @@ package com.example.ElectronicGrade.views.studentGradeView;
 import com.example.ElectronicGrade.model.entity.Grade;
 import com.example.ElectronicGrade.model.entity.Subject;
 import com.example.ElectronicGrade.model.entity.users.Student;
+import com.example.ElectronicGrade.model.entity.users.User;
+import com.example.ElectronicGrade.model.service.StudentService;
 import com.example.ElectronicGrade.security.SecurityService;
 import com.example.ElectronicGrade.views.MainLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
@@ -22,9 +25,8 @@ public class OcenyView extends HorizontalLayout {
 
     private final Student student;
 
-    public OcenyView(SecurityService securityService) {
-        this.student = (Student) securityService.getAuthenticatedUser();
-        setMargin(true);
+    public OcenyView(SecurityService securityService, @Autowired StudentService studentService) {
+        this.student = studentService.findById(((User) securityService.getAuthenticatedUser()).getId()).orElseThrow();
 
         HorizontalLayout header = new HorizontalLayout();
         H1 viewTitle = new H1();
