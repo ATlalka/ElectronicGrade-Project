@@ -39,8 +39,8 @@ public class TeacherService {
         return studentRepository.findByClassId(idClass);
     }
 
-    public List<Lesson> findLessonsByCourseId(Long idCourse) {
-        return lessonRepository.findByCourseId(idCourse);
+    public List<Lesson> findLessonsBySubjectAndClassId(Long idSubject, Long idClass) {
+        return lessonRepository.findBySubjectAndClassId(idSubject, idClass);
     }
 
     public Map<Subject, List<Class>> findSubjectsByTeacherId(Long idTeacher) {
