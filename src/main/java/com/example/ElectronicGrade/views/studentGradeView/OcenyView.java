@@ -48,11 +48,12 @@ public class OcenyView extends HorizontalLayout {
 
             Grid<Grade> gradeGrid = new Grid<>();
             gradeGrid.setItems(grades);
+
             gradeGrid.addColumn(c->c.getValue()).setHeader("Ocena").setAutoWidth(true);
             gradeGrid.addColumn(c->c.getWeight().toString()).setHeader("Waga");
             gradeGrid.addColumn(c->c.getDesc()).setHeader("Komentarz").setAutoWidth(true);
             gradeGrid.addColumn(c->c.getLesson().getDate().toString()).setHeader("Data");
-
+            gradeGrid.setHeightByRows(true);
             verticalLayout.add(l);
             verticalLayout.add(gradeGrid);
         }
