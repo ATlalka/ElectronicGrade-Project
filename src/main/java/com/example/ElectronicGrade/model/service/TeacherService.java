@@ -60,4 +60,8 @@ public class TeacherService {
     public void saveGrade(Grade grade) {
         gradeRepository.save(grade);
     }
+
+    public void deleteGrade(Grade grade) {
+        gradeRepository.delete(grade);
+    }
 }
