@@ -29,4 +29,10 @@ public class Lesson {
     public Course getCourse() {
         return course;
     }
+
+    @Override
+    public String toString() {
+        return "Temat: '" + topic + '\'' +
+                ", data: " + date;
+    }
 }

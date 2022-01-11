@@ -2,6 +2,7 @@ package com.example.ElectronicGrade.views.teacherGradeView;
 
 import com.example.ElectronicGrade.model.entity.Class;
 import com.example.ElectronicGrade.model.entity.Grade;
+import com.example.ElectronicGrade.model.entity.Lesson;
 import com.example.ElectronicGrade.model.entity.Subject;
 import com.example.ElectronicGrade.model.entity.users.Student;
 import com.example.ElectronicGrade.model.entity.users.Teacher;
@@ -14,13 +15,16 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -45,6 +49,8 @@ public class TeacherGradesView extends VerticalLayout {
     private final Teacher teacher;
     private Subject chosenSubject;
     private Class chosenClass;
+    private Student chosenStudent;
+    private Lesson chosenLesson;
     //private Pair<Student, Grade> pair;
     private Grid<GradeData> grid = new Grid<>();
 
@@ -64,6 +70,11 @@ public class TeacherGradesView extends VerticalLayout {
 
         addButton.setEnabled(false);
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        addButton.addClickListener(e -> {
+           addGrade();
+        });
+
         setMargin(true);
         classBox.setEnabled(false);
         HorizontalLayout header = new HorizontalLayout();
@@ -135,11 +146,12 @@ public class TeacherGradesView extends VerticalLayout {
         boxButtonLayout.add(comboBoxesLayout,subjectButton);
         add(boxButtonLayout,addButton,grid);
     }
+
     private void classFunction(com.example.ElectronicGrade.model.entity.Class Class){
 
         chosenClass = Class;
         addButton.setEnabled(true);
-        Notification.show("Wybrano klase "+ chosenClass.toString());
+        Notification.show("Wybrano klasę "+ chosenClass.toString());
         updateGrid();
     }
 
@@ -187,8 +199,7 @@ public class TeacherGradesView extends VerticalLayout {
             deleteButton.addClickListener(e->{
                 teacherService.deleteGrade(gridDataItem.getGrade());
                 updateGrid();
-                Notification.show("Usunieto ocene");
-                //TODO Usuwanie
+                Notification.show("Usunięto ocenę");
                 //TODO popup z potwierdzeniem dokonania akcji
 
             });
@@ -265,7 +276,77 @@ public class TeacherGradesView extends VerticalLayout {
         return layout;
     }
 
+    private void addGrade(){
+        Dialog dialog = new Dialog();
+        dialog.getElement().setAttribute("aria-label", "Create new employee");
 
+        VerticalLayout dialogLayout = createDialogLayout(dialog);
+        dialog.add(dialogLayout);
+
+        Button button = new Button("Show dialog", e -> dialog.open());
+        add(dialog, button);
+    }
+
+    private void studentFunction(Student chosenStudent){
+        this.chosenStudent = chosenStudent;
+    }
+
+    private void lessonFunction(Lesson chosenLesson){
+        this.chosenLesson = chosenLesson;
+    }
+
+    private VerticalLayout createDialogLayout(Dialog dialog){
+        H2 headline = new H2("Dodaj ocenę");
+        headline.getStyle().set("margin", "var(--lumo-space-m) 0 0 0")
+                .set("font-size", "1.5em").set("font-weight", "bold");
+
+        ComboBox<Student> comboBox = new ComboBox<>("Wybierz ucznia");
+        comboBox.setItems(teacherService.findStudentsByClassId(chosenClass.getId()));
+        comboBox.setItemLabelGenerator(Student::toString);
+
+        comboBox.addValueChangeListener(event -> studentFunction(event.getValue()));
+
+        ComboBox<Lesson> lessonComboBox = new ComboBox<>("Wybierz lekcję");
+        lessonComboBox.setItems(teacherService.findLessonsBySubjectAndClassId(chosenSubject.getId(), chosenClass.getId()));
+        lessonComboBox.setItemLabelGenerator(Lesson::toString);
+
+        lessonComboBox.addValueChangeListener(event -> lessonFunction(event.getValue()));
+
+        TextField valueTextField = new TextField("Wartość oceny");
+        TextField weightTextField = new TextField("Waga oceny");
+        TextField descTextField = new TextField("Komentarz do oceny");
+
+        VerticalLayout fieldLayout = new VerticalLayout(comboBox, lessonComboBox, valueTextField, weightTextField, descTextField);
+        fieldLayout.setSpacing(false);
+        fieldLayout.setPadding(false);
+        fieldLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
+
+        Button cancelButton = new Button("Anuluj", e -> dialog.close());
+        Button saveButton = new Button("Zapisz");
+        saveButton.addClickListener(buttonClickEvent -> {
+            if(Double.parseDouble(valueTextField.getValue()) >= 1.0 && Double.parseDouble(valueTextField.getValue()) <= 6.0 && Double.parseDouble(valueTextField.getValue()) % 0.5 == 0 && Double.parseDouble(weightTextField.getValue()) >= 1 && Double.parseDouble(weightTextField.getValue()) <= 3 && Double.parseDouble(weightTextField.getValue()) % 1 ==0){
+                Grade g = new Grade(Double.parseDouble(valueTextField.getValue()), Double.parseDouble(weightTextField.getValue()),descTextField.getValue(), chosenLesson, chosenStudent);
+                teacherService.saveGrade(g);
+                Notification.show("Ocena została zapisana");
+                updateGrid();
+                dialog.close();
+            }
+          // TODO komunikat że nie umiesz wpisywać ocen
+        });
+        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        HorizontalLayout buttonLayout = new HorizontalLayout(cancelButton,
+                saveButton);
+        buttonLayout
+                .setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+
+        VerticalLayout dialogLayout = new VerticalLayout(headline, fieldLayout,
+                buttonLayout);
+        dialogLayout.setPadding(false);
+        dialogLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
+        dialogLayout.getStyle().set("width", "400px").set("max-width", "100%");
+
+        return dialogLayout;
+    }
 }
 
 //TODO dorobić wszystkie metody get i set i save które będą wykorzystywane w edytowaniu
@@ -287,8 +368,6 @@ class GradeData{
     public Grade getGrade() {
         return grade;
     }
-
-    // waga wartosc i komentarz
 
     public String getGradeValue(){
         return Double.toString(grade.getValue());

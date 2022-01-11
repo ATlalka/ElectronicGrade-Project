@@ -56,4 +56,9 @@ public class Student extends User {
         }
         return result;
     }
+
+    @Override
+    public String toString() {
+        return getSurname() + " " + getFirstName();
+    }
 }
