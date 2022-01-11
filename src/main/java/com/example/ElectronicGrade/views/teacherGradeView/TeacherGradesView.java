@@ -3,6 +3,7 @@ package com.example.ElectronicGrade.views.teacherGradeView;
 import com.example.ElectronicGrade.model.entity.Class;
 import com.example.ElectronicGrade.model.entity.Grade;
 import com.example.ElectronicGrade.model.entity.Subject;
+import com.example.ElectronicGrade.model.entity.users.Student;
 import com.example.ElectronicGrade.model.entity.users.Teacher;
 import com.example.ElectronicGrade.model.entity.users.User;
 import com.example.ElectronicGrade.model.service.StudentService;
@@ -10,7 +11,6 @@ import com.example.ElectronicGrade.model.service.TeacherService;
 import com.example.ElectronicGrade.security.SecurityService;
 import com.example.ElectronicGrade.views.MainLayout;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -20,20 +20,20 @@ import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextFieldVariant;
-import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.xml.crypto.Data;
-import java.awt.*;
+
 import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
@@ -45,13 +45,14 @@ public class TeacherGradesView extends VerticalLayout {
     private final Teacher teacher;
     private Subject chosenSubject;
     private Class chosenClass;
+    //private Pair<Student, Grade> pair;
+    private Grid<GradeData> grid = new Grid<>();
 
     @Autowired
     private final TeacherService teacherService;
     @Autowired
     private final StudentService studentService;
 
-    private final Grid <Student> klasaGrid = new Grid<>();
     ComboBox<Subject> subjectBox = new ComboBox<>("Przedmiot");
     ComboBox<com.example.ElectronicGrade.model.entity.Class>  classBox = new ComboBox<>("Klasa");
     Button subjectButton = new Button("Zmień przedmiot");
@@ -88,6 +89,7 @@ public class TeacherGradesView extends VerticalLayout {
         List <Subject> subjectList =  new ArrayList<>();
 
         Map<Subject, List<Class>> classMap = this.teacherService.findSubjectsByTeacherId(teacher.getId());
+
         for(Subject s : classMap.keySet()){
 
             subjectList.add(s);
@@ -127,41 +129,64 @@ public class TeacherGradesView extends VerticalLayout {
         chosenClass = classesList.get(0);
         classBox.addValueChangeListener(event -> classFunction(event.getValue()));
 
+        grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 
-        /*
-        grid - czlonkowie klasy i ich oceny
-         */
+        comboBoxesLayout.add(subjectBox,classBox);
+        boxButtonLayout.add(comboBoxesLayout,subjectButton);
+        add(boxButtonLayout,addButton,grid);
+    }
+    private void classFunction(com.example.ElectronicGrade.model.entity.Class Class){
 
-        Grid<sampleData> gridData = new Grid<>();
-        sampleData data = new sampleData("Aleksanda", "Tlalka", 5,"02-04-2021", "sprawdzian", "lorem ipsum");
+        chosenClass = Class;
+        addButton.setEnabled(true);
+        Notification.show("Wybrano klase "+ chosenClass.toString());
+        List<Student> students = teacherService.findStudentsByClassId(chosenClass.getId());
+        updateGrid(students);
+    }
 
-        gridData.getHeaderRows().clear();
-        HeaderRow headerRow = gridData.appendHeaderRow();
+    private void updateGrid(List<Student> students){
 
-        Editor<sampleData> editor = gridData.getEditor();
+        ArrayList<GradeData> dataList = new ArrayList<>();
 
-        Grid.Column<sampleData> nameColumn =  gridData.addColumn(sampleData::getName);  //TODO dodac filtr
-        Grid.Column<sampleData> surnameColumn = gridData.addColumn(sampleData::getSurname); //TODO dodac filtr
-        Grid.Column<sampleData> gradeColumn = gridData.addColumn(sampleData::getGradeValue).setHeader("Ocena");
-        Grid.Column<sampleData> dateColumn = gridData.addColumn(sampleData::getDate).setHeader("Data");
-        Grid.Column<sampleData> typeColumn = gridData.addColumn(sampleData::getType).setHeader("Typ");
-        Grid.Column<sampleData>  commentColumn = gridData.addColumn(sampleData::getComment).setHeader("Komentarz");
-        Grid.Column<sampleData> editColumn = gridData.addComponentColumn(gridDataItem -> {
+        for(Student s : students){
+
+            for(Grade g : s.getGrades(chosenSubject)){
+                dataList.add(new GradeData(s,g, teacherService));
+            }
+        }
+
+        grid.getHeaderRows().clear();
+        HeaderRow headerRow = grid.appendHeaderRow();
+
+        Editor<GradeData> editor = grid.getEditor();
+
+        Grid.Column<GradeData> nameColumn =  grid.addColumn(s -> s.getStudent().getFirstName());
+        Grid.Column<GradeData> surnameColumn = grid.addColumn(s -> s.getStudent().getSurname());
+        Grid.Column<GradeData> gradeColumn = grid.addColumn(s -> s.getGrade().getValue()).setHeader("Ocena");
+        Grid.Column<GradeData> weightColumn = grid.addColumn(s -> s.getGrade().getWeight()).setHeader("Waga");
+        Grid.Column<GradeData> dateColumn = grid.addColumn(s -> s.getGrade().getLesson().getDate()).setHeader("Data");
+        Grid.Column<GradeData>  commentColumn = grid.addColumn(s -> s.getGrade().getDesc()).setHeader("Komentarz");
+
+        Grid.Column<GradeData> editColumn = grid.addComponentColumn(gridDataItem -> {
             Button editButton = new Button ("Modyfikuj");
             //editButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             editButton.addClickListener(e-> {
                 if(editor.isOpen())
                     editor.cancel();
-                gridData.getEditor().editItem(gridDataItem);
+
+                grid.getEditor().editItem(gridDataItem);
             });
             return editButton;
         }).setWidth("150px").setFlexGrow(0);
 
-        Grid.Column<sampleData> deleteColumn = gridData.addComponentColumn(gridDataItem->{
+        Grid.Column<GradeData> deleteColumn = grid.addComponentColumn(gridDataItem->{
             Button deleteButton = new Button ("Usuń");
             deleteButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
             deleteButton.addClickListener(e->{
-
+                Notification.show("Kliknieto usun ocene");
+                teacherService.deleteGrade(grid.getEditor().getItem().getGrade());
+                grid.getDataProvider().refreshAll();
+                Notification.show("Usunieto ocene");
                 //TODO Usuwanie
                 //TODO popup z potwierdzeniem dokonania akcji
 
@@ -169,11 +194,8 @@ public class TeacherGradesView extends VerticalLayout {
             return deleteButton;
         }).setWidth("150px").setFlexGrow(0);
 
-        List<sampleData> dataList = new ArrayList<>();
-        dataList.add(data);
-
-        ListDataProvider<sampleData> dataProvider = new ListDataProvider<>(dataList);
-        gridData.setDataProvider(dataProvider);
+        ListDataProvider<GradeData> dataProvider = new ListDataProvider<>(dataList);
+        grid.setDataProvider(dataProvider);
 
         StudentFilter studentFilter = new StudentFilter(dataProvider);
 
@@ -181,59 +203,37 @@ public class TeacherGradesView extends VerticalLayout {
         headerRow.getCell(surnameColumn).setComponent(createFilterHeader("Surname",studentFilter::setSurname));
 
 
-        /* --------------------------- EDYTOWANIE
-        Binder<Person> binder = new Binder<>(Person.class);
+        Binder<GradeData> binder = new Binder<>(GradeData.class);
         editor.setBinder(binder);
         editor.setBuffered(true);
 
-        TextField firstNameField = new TextField();
-        firstNameField.setWidthFull();
-        binder.forField(firstNameField)
-                .asRequired("First name must not be empty")
-                 .withStatusLabel(firstNameValidationMessage)
-                  .bind(Person::getFirstName, Person::setFirstName);
-         firstNameColumn.setEditorComponent(firstNameField);
+        TextField gradeValueField = new TextField();
+        gradeValueField.setWidthFull();
+        binder.forField(gradeValueField)
+                .bind(GradeData::getGradeValue, GradeData::setGradeValue);
+        gradeColumn.setEditorComponent(gradeValueField);
 
-        TextField lastNameField = new TextField();
-        lastNameField.setWidthFull();
-        binder.forField(lastNameField).asRequired("Last name must not be empty")
-            .withStatusLabel(lastNameValidationMessage)
-            .bind(Person::getLastName, Person::setLastName);
-        lastNameColumn.setEditorComponent(lastNameField);
+        TextField gradeWeightField = new TextField();
+        gradeWeightField.setWidthFull();
+        binder.forField(gradeWeightField)
+                .bind(GradeData::getGradeWeight, GradeData::setGradeWeight);
+        weightColumn.setEditorComponent(gradeWeightField);
 
-        EmailField emailField = new EmailField();
-        emailField.setWidthFull();
-        binder.forField(emailField).asRequired("Email must not be empty")
-             .withValidator(new EmailValidator(
-                "Please enter a valid email address"))
-               .withStatusLabel(emailValidationMessage)
-             .bind(Person::getEmail, Person::setEmail);
-         emailColumn.setEditorComponent(emailField);
+        TextField gradeDescField = new TextField();
+        gradeDescField.setWidthFull();
+        binder.forField(gradeDescField)
+                .bind(GradeData::getGradeDesc, GradeData::setGradeDesc);
+        commentColumn.setEditorComponent(gradeDescField);
 
         Button saveButton = new Button("Save", e -> editor.save());
         Button cancelButton = new Button(VaadinIcon.CLOSE.create(),
-            e -> editor.cancel());
+                e -> editor.cancel());
         cancelButton.addThemeVariants(ButtonVariant.LUMO_ICON,
-            ButtonVariant.LUMO_ERROR);
+                ButtonVariant.LUMO_ERROR);
         HorizontalLayout actions = new HorizontalLayout(saveButton,
-         cancelButton);
+                cancelButton);
         actions.setPadding(false);
         editColumn.setEditorComponent(actions);
-
-      ________________________________________________________________--
-         */
-
-
-        gridData.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
-
-        comboBoxesLayout.add(subjectBox,classBox);
-        boxButtonLayout.add(comboBoxesLayout,subjectButton);
-        add(boxButtonLayout,addButton,gridData);
-    }
-    private void classFunction(com.example.ElectronicGrade.model.entity.Class Class){
-
-        chosenClass = Class;
-        addButton.setEnabled(true);
 
     }
 
@@ -266,64 +266,78 @@ public class TeacherGradesView extends VerticalLayout {
 
 
 }
-class sampleData{
 
-    public void setName(String name) {
-        this.name = name;
+//TODO dorobić wszystkie metody get i set i save które będą wykorzystywane w edytowaniu
+class GradeData{
+    private Student student;
+    private Grade grade;
+    private TeacherService teacherService;
+
+    public GradeData(Student student, Grade grade, TeacherService teacherService) {
+        this.student = student;
+        this.grade = grade;
+        this.teacherService = teacherService;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public Student getStudent() {
+        return student;
     }
 
-    String name;
-    String surname;
-
-    int gradeValue;
-    String date;
-    String comment;
-    String type;
-
-    sampleData(String name, String surname,int gradeValue, String date, String type, String comment){
-        this. name = name;
-        this.surname= surname;
-        this.gradeValue = gradeValue;
-        this.date = date;
-        this.comment = comment;
-        this.type = type;
+    public Grade getGrade() {
+        return grade;
     }
 
-    public String getName() {
-        return name;
-    }
-    public String getSurname(){
-         return surname;
-    }
-    public int getGradeValue() {
-        return gradeValue;
+    // waga wartosc i komentarz
+
+    public String getGradeValue(){
+        return Double.toString(grade.getValue());
     }
 
-    public String getDate() {
-        return date;
+    public void setGradeValue(String val){
+        double value = Double.parseDouble(val);
+        if (value > 1.0 && value <= 6.0 && value % 0.5 == 0){
+            grade.setValue(value);
+            teacherService.saveGrade(grade);
+            return;
+        }
+
+        //TODO info o zlym formacie
     }
 
-    public String getComment() {
-        return comment;
+    public String getGradeWeight(){
+        return Double.toString(grade.getWeight());
     }
 
-    public String getType(){
-        return type;
+    public void setGradeWeight(String val){
+        double value = Double.parseDouble(val);
+        if (value > 1 && value <= 3 && value % 1 == 0){
+            grade.setWeight(value);
+            teacherService.saveGrade(grade);
+            return;
+        }
+        //TODO info o zlym formacie
+    }
+
+    public String getGradeDesc(){
+        return grade.getDesc();
+    }
+
+    public void setGradeDesc(String desc){
+        grade.setDesc(desc);
+        teacherService.saveGrade(grade);
+        return;
+
     }
 }
 
 class StudentFilter{
 
-    private final ListDataProvider<sampleData> dataProvider;
+    private final ListDataProvider<GradeData> dataProvider;
 
     private String fullName;
     private String surname;
 
-    public StudentFilter(ListDataProvider<sampleData> dataProvider) {
+    public StudentFilter(ListDataProvider<GradeData> dataProvider) {
         this.dataProvider = dataProvider;
         this.dataProvider.addFilter(this::test);
     }
@@ -339,9 +353,9 @@ class StudentFilter{
     }
 
 
-    public boolean test(sampleData data) {
-        boolean matchesFullName = matches(data.getName(), fullName);
-        boolean matchesEmail = matches(data.getSurname(), surname);
+    public boolean test(GradeData data) {
+        boolean matchesFullName = matches(data.getStudent().getFirstName(), fullName);
+        boolean matchesEmail = matches(data.getStudent().getSurname(), surname);
 
         return matchesFullName && matchesEmail;
     }

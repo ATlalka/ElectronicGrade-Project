@@ -26,4 +26,8 @@ public class Subject {
     public List<Course> getCourses() {
         return courses;
     }
+
+    public Long getId() {
+        return id;
+    }
 }

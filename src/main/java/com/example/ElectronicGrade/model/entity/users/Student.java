@@ -50,7 +50,7 @@ public class Student extends User {
     public List<Grade> getGrades(Subject subject) {
         List<Grade> result = new ArrayList<>();
         for (Grade grade : grades) {
-            if (grade.getSubject() == subject) {
+            if (grade.getSubject().getId() == subject.getId()) {
                 result.add(grade);
             }
         }

@@ -84,4 +84,12 @@ public abstract class User implements UserDetails {
         return id;
     }
 
+    public String getFirstName(){
+        return person.getName();
+    }
+
+    public String getSurname(){
+        return person.getSurname();
+    }
+
 }

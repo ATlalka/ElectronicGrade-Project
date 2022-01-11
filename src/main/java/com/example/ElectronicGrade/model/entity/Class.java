@@ -56,4 +56,7 @@ public class Class {
         return result;
     }
 
+    public Long getId() {
+        return id;
+    }
 }
