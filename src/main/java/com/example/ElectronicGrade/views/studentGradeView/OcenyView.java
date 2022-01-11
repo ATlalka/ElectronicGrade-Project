@@ -8,6 +8,7 @@ import com.example.ElectronicGrade.model.service.StudentService;
 import com.example.ElectronicGrade.security.SecurityService;
 import com.example.ElectronicGrade.views.MainLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -49,6 +50,7 @@ public class OcenyView extends HorizontalLayout {
             Label l = new Label(subjectName);
 
             Grid<Grade> gradeGrid = new Grid<>();
+            gradeGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
             gradeGrid.setItems(grades);
 
             gradeGrid.addColumn(c->c.getValue()).setHeader("Ocena").setAutoWidth(true);
