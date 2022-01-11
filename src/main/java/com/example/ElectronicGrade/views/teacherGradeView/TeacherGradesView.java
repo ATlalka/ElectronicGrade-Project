@@ -24,7 +24,10 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextAreaVariant;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -35,6 +38,7 @@ import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -64,6 +68,9 @@ public class TeacherGradesView extends VerticalLayout {
     Button subjectButton = new Button("Zmień przedmiot");
     Button addButton = new Button ("Dodaj ocenę");
     public TeacherGradesView(SecurityService securityService, @Autowired TeacherService teacherService, @Autowired StudentService studentService) {
+
+
+        grid.setWidthFull();
         this.teacherService = teacherService;
         this.studentService = studentService;
         this.teacher = teacherService.findById(((User) securityService.getAuthenticatedUser()).getId()).orElseThrow();
@@ -73,6 +80,14 @@ public class TeacherGradesView extends VerticalLayout {
 
         addButton.addClickListener(e -> {
            addGrade();
+        });
+
+        subjectButton.addClickListener(e->{
+            grid.removeAllColumns();
+            grid.setVisible(false);
+            classBox.setEnabled(false);
+            addButton.setEnabled(false);
+            subjectBox.setEnabled(true);
         });
 
         setMargin(true);
@@ -107,11 +122,17 @@ public class TeacherGradesView extends VerticalLayout {
         }
 
         subjectBox.setItems(subjectList);
-        //subjectBox.setValue(subjectList.get(0));
+
         subjectBox.setAllowCustomValue(false);
         subjectBox.setItemLabelGenerator(Subject::getName);
         chosenSubject =  subjectList.get(0);
-        subjectBox.addValueChangeListener(event -> subjectFunction(event.getValue()));
+        subjectBox.addValueChangeListener(event -> {
+            subjectFunction(event.getValue());
+            if(subjectList.size()>1) {
+                subjectBox.setEnabled(false);
+                subjectButton.setEnabled(true);
+            }
+        });
 
 
 
@@ -134,7 +155,6 @@ public class TeacherGradesView extends VerticalLayout {
         }
 
         classBox.setItems(classesList);
-        //classBox.setValue(classesList.get(0));
         classBox.setAllowCustomValue(false);
         classBox.setItemLabelGenerator(com.example.ElectronicGrade.model.entity.Class::toString);
         chosenClass = classesList.get(0);
@@ -145,13 +165,14 @@ public class TeacherGradesView extends VerticalLayout {
         comboBoxesLayout.add(subjectBox,classBox);
         boxButtonLayout.add(comboBoxesLayout,subjectButton);
         add(boxButtonLayout,addButton,grid);
+
+        this.setAlignItems(Alignment.START);
     }
 
     private void classFunction(com.example.ElectronicGrade.model.entity.Class Class){
-
+        grid.setVisible(true);
         chosenClass = Class;
         addButton.setEnabled(true);
-        Notification.show("Wybrano klasę "+ chosenClass.toString());
         updateGrid();
     }
 
@@ -169,13 +190,15 @@ public class TeacherGradesView extends VerticalLayout {
             }
         }
 
-        grid.getHeaderRows().clear();
-        HeaderRow headerRow = grid.appendHeaderRow();
 
         Editor<GradeData> editor = grid.getEditor();
+        ListDataProvider<GradeData> dataProvider = new ListDataProvider<>(dataList);
+        grid.setDataProvider(dataProvider);
 
-        Grid.Column<GradeData> nameColumn =  grid.addColumn(s -> s.getStudent().getFirstName());
-        Grid.Column<GradeData> surnameColumn = grid.addColumn(s -> s.getStudent().getSurname());
+        StudentFilter studentFilter = new StudentFilter(dataProvider);
+
+        Grid.Column<GradeData> nameColumn =  grid.addColumn(s -> s.getStudent().getFirstName()).setHeader(createFilterHeader("Imię",studentFilter::setName));;
+        Grid.Column<GradeData> surnameColumn = grid.addColumn(s -> s.getStudent().getSurname()).setHeader(createFilterHeader("Nazwisko",studentFilter::setSurname));
         Grid.Column<GradeData> gradeColumn = grid.addColumn(s -> s.getGrade().getValue()).setHeader("Ocena");
         Grid.Column<GradeData> weightColumn = grid.addColumn(s -> s.getGrade().getWeight()).setHeader("Waga");
         Grid.Column<GradeData> dateColumn = grid.addColumn(s -> s.getGrade().getLesson().getDate()).setHeader("Data");
@@ -183,7 +206,6 @@ public class TeacherGradesView extends VerticalLayout {
 
         Grid.Column<GradeData> editColumn = grid.addComponentColumn(gridDataItem -> {
             Button editButton = new Button ("Modyfikuj");
-            //editButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             editButton.addClickListener(e-> {
                 if(editor.isOpen())
                     editor.cancel();
@@ -197,22 +219,18 @@ public class TeacherGradesView extends VerticalLayout {
             Button deleteButton = new Button ("Usuń");
             deleteButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
             deleteButton.addClickListener(e->{
-                teacherService.deleteGrade(gridDataItem.getGrade());
-                updateGrid();
-                Notification.show("Usunięto ocenę");
-                //TODO popup z potwierdzeniem dokonania akcji
+
+                Dialog deleteDialog = new Dialog();
+                deleteDialog.getElement();
+                VerticalLayout deleteLayout = createRemoveDialog(deleteDialog,gridDataItem.getGrade());
+                deleteDialog.add(deleteLayout);
+                deleteDialog.open();
+                add(deleteDialog);
+
 
             });
             return deleteButton;
         }).setWidth("150px").setFlexGrow(0);
-
-        ListDataProvider<GradeData> dataProvider = new ListDataProvider<>(dataList);
-        grid.setDataProvider(dataProvider);
-
-        StudentFilter studentFilter = new StudentFilter(dataProvider);
-
-        headerRow.getCell(nameColumn).setComponent(createFilterHeader("Name",studentFilter::setName));
-        headerRow.getCell(surnameColumn).setComponent(createFilterHeader("Surname",studentFilter::setSurname));
 
 
         Binder<GradeData> binder = new Binder<>(GradeData.class);
@@ -251,8 +269,6 @@ public class TeacherGradesView extends VerticalLayout {
 
     private void subjectFunction (Subject subject){
             chosenSubject = subject;
-            subjectButton.setEnabled(true);
-            subjectBox.setEnabled(false);
             classBox.setEnabled(true);
     }
 
@@ -283,8 +299,8 @@ public class TeacherGradesView extends VerticalLayout {
         VerticalLayout dialogLayout = createDialogLayout(dialog);
         dialog.add(dialogLayout);
 
-        Button button = new Button("Show dialog", e -> dialog.open());
-        add(dialog, button);
+        dialog.open();
+        add(dialog);
     }
 
     private void studentFunction(Student chosenStudent){
@@ -293,6 +309,101 @@ public class TeacherGradesView extends VerticalLayout {
 
     private void lessonFunction(Lesson chosenLesson){
         this.chosenLesson = chosenLesson;
+    }
+
+    private VerticalLayout createErrorDialog(Dialog dialog, String message){
+
+        Button headline = new Button ("Błędna wartość");
+        headline.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_ERROR);
+        TextArea errorMessage = new TextArea();
+        errorMessage.setValue(message);
+        errorMessage.addThemeVariants(TextAreaVariant.LUMO_ALIGN_CENTER);
+        Button okButton = new Button ("OK", e -> dialog.close());
+        okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        VerticalLayout layout = new VerticalLayout();
+        layout.add(headline);
+        layout.add(errorMessage);
+        layout.add(okButton);
+
+        layout.setSpacing(false);
+        layout.setPadding(true);
+        layout.setAlignItems(FlexComponent.Alignment.STRETCH);
+        layout.getStyle().set("width", "300px").set("max-width", "100%");
+        return layout;
+    }
+
+    private VerticalLayout createRemoveDialog(Dialog dialog, Grade grade){
+
+        Button headline = new Button ("Usuwanie Oceny");
+        headline.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_ERROR);
+        TextArea deleteMessage = new TextArea();
+        deleteMessage .setValue("Czy na pewno chcesz usunąć ocenę?");
+        deleteMessage .addThemeVariants(TextAreaVariant.LUMO_ALIGN_CENTER);
+
+        Button okButton = new Button ("TAK", e -> {
+            dialog.close();
+            teacherService.deleteGrade(grade);
+            Notification.show("Ocena została usunięta");
+            updateGrid();
+        });
+        okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        Button noButton = new Button("NIE", e->dialog.close());
+        noButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+
+        HorizontalLayout buttons = new HorizontalLayout(noButton,okButton);
+        buttons.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        buttons.setPadding(true);
+        buttons.getStyle().set("width","250px").set("max-width","100%");
+
+
+        VerticalLayout layout = new VerticalLayout();
+        layout.add(headline);
+        layout.add(deleteMessage );
+
+        layout.setSpacing(false);
+        layout.add(buttons);
+        layout.setAlignItems(Alignment.STRETCH);
+
+        layout.getStyle().set("width", "300px").set("max-width", "100%");
+        return layout;
+    }
+
+    private VerticalLayout createConfirmationDialog(Dialog dialog, Dialog mainDialog){
+
+        H2 headline = new H2 ("Opuszczasz stronę");
+        HorizontalLayout headLayout = new HorizontalLayout(headline);
+        headLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+
+        TextArea message = new TextArea();
+        message.setValue("Na pewno chcesz opuścić stronę? Utracisz wprowadzone dane");
+        message.addThemeVariants(TextAreaVariant.LUMO_ALIGN_CENTER);
+        Button okButton = new Button ("TAK", e -> {
+            dialog.close();
+            mainDialog.close();
+        });
+        okButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        Button noButton = new Button("NIE", e->dialog.close());
+        noButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+
+        HorizontalLayout buttons = new HorizontalLayout(noButton,okButton);
+        buttons.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        buttons.setPadding(true);
+        buttons.getStyle().set("width","250px").set("max-width","100%");
+
+
+        VerticalLayout layout = new VerticalLayout();
+        layout.add(headLayout);
+        layout.add(message);
+
+        layout.setSpacing(false);
+        layout.add(buttons);
+        layout.setAlignItems(Alignment.STRETCH);
+
+        layout.getStyle().set("width", "300px").set("max-width", "100%");
+        return layout;
     }
 
     private VerticalLayout createDialogLayout(Dialog dialog){
@@ -321,17 +432,50 @@ public class TeacherGradesView extends VerticalLayout {
         fieldLayout.setPadding(false);
         fieldLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
 
-        Button cancelButton = new Button("Anuluj", e -> dialog.close());
+        Button cancelButton = new Button("Anuluj", e -> {
+            Dialog confirmationDialog = new Dialog();
+            confirmationDialog.getElement();
+            VerticalLayout confirmationLayout = createConfirmationDialog(confirmationDialog,dialog);
+            confirmationDialog.add(confirmationLayout);
+            confirmationDialog.open();
+            add(confirmationDialog);
+        });
         Button saveButton = new Button("Zapisz");
         saveButton.addClickListener(buttonClickEvent -> {
-            if(Double.parseDouble(valueTextField.getValue()) >= 1.0 && Double.parseDouble(valueTextField.getValue()) <= 6.0 && Double.parseDouble(valueTextField.getValue()) % 0.5 == 0 && Double.parseDouble(weightTextField.getValue()) >= 1 && Double.parseDouble(weightTextField.getValue()) <= 3 && Double.parseDouble(weightTextField.getValue()) % 1 ==0){
+            if(!valueTextField.getValue().equals("") && !weightTextField.getValue().equals("") && Double.parseDouble(valueTextField.getValue()) >= 1.0 && Double.parseDouble(valueTextField.getValue()) <= 6.0 && Double.parseDouble(valueTextField.getValue()) % 0.5 == 0 && Double.parseDouble(weightTextField.getValue()) >= 1 && Double.parseDouble(weightTextField.getValue()) <= 3 && Double.parseDouble(weightTextField.getValue()) % 1 ==0){
                 Grade g = new Grade(Double.parseDouble(valueTextField.getValue()), Double.parseDouble(weightTextField.getValue()),descTextField.getValue(), chosenLesson, chosenStudent);
                 teacherService.saveGrade(g);
                 Notification.show("Ocena została zapisana");
                 updateGrid();
                 dialog.close();
             }
-          // TODO komunikat że nie umiesz wpisywać ocen
+            String errorMessage = "";
+
+            if (valueTextField.getValue().equals("") || Double.parseDouble(valueTextField.getValue()) < 1.0 || Double.parseDouble(valueTextField.getValue()) > 6.0 || Double.parseDouble(valueTextField.getValue()) % 0.5 != 0) {
+                    errorMessage = "Niepoprawna wartość oceny! \n\n" +
+                            "Poprawne wartości oceny to \n 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6";
+
+                Dialog errorDialog = new Dialog();
+                errorDialog.getElement();
+                VerticalLayout errorLayout = createErrorDialog(errorDialog, errorMessage);
+                errorDialog.add(errorLayout);
+                errorDialog.open();
+                add(errorDialog);
+
+            }
+            if (valueTextField.getValue().equals("") || Double.parseDouble(weightTextField.getValue()) < 1 || Double.parseDouble(weightTextField.getValue()) > 3 || Double.parseDouble(weightTextField.getValue()) % 1 != 0) {
+                errorMessage = "Niepoprawna waga oceny! \n" +
+                        "Poprawne wartości oceny 1,2, 3";
+
+                Dialog errorDialog = new Dialog();
+                errorDialog.getElement();
+                VerticalLayout errorLayout = createErrorDialog(errorDialog, errorMessage);
+                errorDialog.add(errorLayout);
+                errorDialog.open();
+                add(errorDialog);
+
+            }
+
         });
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         HorizontalLayout buttonLayout = new HorizontalLayout(cancelButton,
