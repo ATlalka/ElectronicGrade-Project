@@ -140,11 +140,13 @@ public class TeacherGradesView extends VerticalLayout {
         chosenClass = Class;
         addButton.setEnabled(true);
         Notification.show("Wybrano klase "+ chosenClass.toString());
-        List<Student> students = teacherService.findStudentsByClassId(chosenClass.getId());
-        updateGrid(students);
+        updateGrid();
     }
 
-    private void updateGrid(List<Student> students){
+    private void updateGrid(){
+
+        List<Student> students = teacherService.findStudentsByClassId(chosenClass.getId());
+        grid.removeAllColumns();
 
         ArrayList<GradeData> dataList = new ArrayList<>();
 
@@ -183,9 +185,8 @@ public class TeacherGradesView extends VerticalLayout {
             Button deleteButton = new Button ("Usuń");
             deleteButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
             deleteButton.addClickListener(e->{
-                Notification.show("Kliknieto usun ocene");
-                teacherService.deleteGrade(grid.getEditor().getItem().getGrade());
-                grid.getDataProvider().refreshAll();
+                teacherService.deleteGrade(gridDataItem.getGrade());
+                updateGrid();
                 Notification.show("Usunieto ocene");
                 //TODO Usuwanie
                 //TODO popup z potwierdzeniem dokonania akcji
