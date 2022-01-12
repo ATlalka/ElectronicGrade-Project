@@ -255,7 +255,7 @@ public class TeacherGradesView extends VerticalLayout {
                 .bind(GradeData::getGradeDesc, GradeData::setGradeDesc);
         commentColumn.setEditorComponent(gradeDescField);
 
-        Button saveButton = new Button("Save", e -> editor.save());
+        Button saveButton = new Button("Zapisz", e -> editor.save());
         Button cancelButton = new Button(VaadinIcon.CLOSE.create(),
                 e -> editor.cancel());
         cancelButton.addThemeVariants(ButtonVariant.LUMO_ICON,
