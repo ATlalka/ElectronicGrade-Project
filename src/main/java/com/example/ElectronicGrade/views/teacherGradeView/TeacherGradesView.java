@@ -69,8 +69,6 @@ public class TeacherGradesView extends VerticalLayout {
     Button addButton = new Button ("Dodaj ocenę");
     public TeacherGradesView(SecurityService securityService, @Autowired TeacherService teacherService, @Autowired StudentService studentService) {
 
-
-        grid.setWidthFull();
         this.teacherService = teacherService;
         this.studentService = studentService;
         this.teacher = teacherService.findById(((User) securityService.getAuthenticatedUser()).getId()).orElseThrow();
@@ -93,7 +91,7 @@ public class TeacherGradesView extends VerticalLayout {
         setMargin(true);
         classBox.setEnabled(false);
         HorizontalLayout header = new HorizontalLayout();
-        H1 viewTitle = new H1();
+        H2 viewTitle = new H2();
         header.add(viewTitle);
         header.setWidth("100%");
         header.addClassNames("bg-base", "border-b", "border-contrast-10", "box-border", "flex", "h-xl", "items-center",
@@ -161,12 +159,18 @@ public class TeacherGradesView extends VerticalLayout {
         classBox.addValueChangeListener(event -> classFunction(event.getValue()));
 
         grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
+        grid.setWidth("100%");
+        grid.setHeightByRows(true);
+        grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
 
         comboBoxesLayout.add(subjectBox,classBox);
+        boxButtonLayout.setJustifyContentMode(JustifyContentMode.START);
+        boxButtonLayout.setPadding(false);
         boxButtonLayout.add(comboBoxesLayout,subjectButton);
         add(boxButtonLayout,addButton,grid);
 
-        this.setAlignItems(Alignment.START);
+        this.setJustifyContentMode(JustifyContentMode.START);
+        this.setWidth("98%");
     }
 
     private void classFunction(com.example.ElectronicGrade.model.entity.Class Class){
@@ -493,7 +497,6 @@ public class TeacherGradesView extends VerticalLayout {
     }
 }
 
-//TODO dorobić wszystkie metody get i set i save które będą wykorzystywane w edytowaniu
 class GradeData{
     private Student student;
     private Grade grade;
@@ -525,7 +528,7 @@ class GradeData{
             return;
         }
 
-        //TODO info o zlym formacie
+
     }
 
     public String getGradeWeight(){
@@ -539,7 +542,7 @@ class GradeData{
             teacherService.saveGrade(grade);
             return;
         }
-        //TODO info o zlym formacie
+
     }
 
     public String getGradeDesc(){

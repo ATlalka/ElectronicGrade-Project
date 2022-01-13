@@ -4,7 +4,7 @@ import com.example.ElectronicGrade.model.entity.users.Role;
 import com.example.ElectronicGrade.model.entity.users.Student;
 import com.example.ElectronicGrade.model.entity.users.User;
 import com.example.ElectronicGrade.security.SecurityService;
-import com.example.ElectronicGrade.views.studentGradeView.OcenyView;
+import com.example.ElectronicGrade.views.studentGradeView.StudentGradesView;
 import com.example.ElectronicGrade.views.teacherGradeView.TeacherGradesView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -12,17 +12,16 @@ import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextAreaVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -96,11 +95,14 @@ public class MainLayout extends AppLayout {
             H2 appName = new H2("Witaj");
             Label userName = new Label(user.getName());
             VerticalLayout verticalLayout = new VerticalLayout();
+            verticalLayout.setAlignItems(FlexComponent.Alignment.CENTER);
             if(user.getRoles().contains(Role.STUDENT))
             {
                 Student studentUser = (Student) securityService.getAuthenticatedUser();
                 Label className = new Label(studentUser.getStudentClass().toString());
-                Label classExtension = new Label(studentUser.getStudentClass().getExtensionsNames());
+                TextArea classExtension = new TextArea();
+                classExtension.setValue(studentUser.getStudentClass().getExtensionsNames());
+                classExtension.addThemeVariants(TextAreaVariant.LUMO_ALIGN_CENTER);
                 verticalLayout.add(appName, userName, className, classExtension);
                 section = new com.vaadin.flow.component.html.Section(verticalLayout,
                         createNavigation(), createFooter());
@@ -124,74 +126,57 @@ public class MainLayout extends AppLayout {
 
     private Nav createNavigation() {
         Nav nav = new Nav();
-        nav.addClassNames("border-b", "border-contrast-10", "flex-grow", "overflow-auto");
-        nav.getElement().setAttribute("aria-labelledby", "views");
+        VerticalLayout layout = new VerticalLayout();
 
-        // Wrap the links in a list; improves accessibility
-        UnorderedList list = new UnorderedList();
-        list.addClassNames("list-none", "m-0", "p-0");
-        nav.add(list);
 
         User user = (User) securityService.getAuthenticatedUser();
         if(user!= null){
             if(user.getRoles().contains(Role.STUDENT)) {
-                for (RouterLink link : createStudentLinks()) {
-                    ListItem item = new ListItem(link);
-                    list.add(item);
-                }
+                layout = createStudentLinks();
             }
             else
             {
-                for (RouterLink link : createTeacherLinks()) {
-                    ListItem item = new ListItem(link);
-                    list.add(item);
-                }
+                layout = createTeacherLinks();
             }
         }
 
+        nav.add(layout);
         return nav;
+
+
     }
 
-    private List<RouterLink> createStudentLinks() {
-        MenuItemInfo[] menuItems = new MenuItemInfo[]{ //
-                new MenuItemInfo("Oceny", "la la-globe", OcenyView.class), //
-        };
-        List<RouterLink> links = new ArrayList<>();
-        for (MenuItemInfo menuItemInfo : menuItems) {
-            links.add(createLink(menuItemInfo));
+    private VerticalLayout createStudentLinks() {
 
-        }
+        VerticalLayout links =  new VerticalLayout();
+
+        Button button = new Button("Oceny");
+        button.addClickListener( e-> {
+            button.getUI().ifPresent(ui -> ui.navigate(StudentGradesView.class));
+        });
+        button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        button.setWidthFull();
+        links.add(button);
+
+        links.getStyle().set("width", "250px").set("max-width", "100%");
         return links;
     }
 
-    private List<RouterLink> createTeacherLinks() {
-        MenuItemInfo[] menuItems = new MenuItemInfo[]{ //
-                new MenuItemInfo("Oceny", "la la-globe", TeacherGradesView.class), //
-        };
-        List<RouterLink> links = new ArrayList<>();
-        for (MenuItemInfo menuItemInfo : menuItems) {
-            links.add(createLink(menuItemInfo));
+    private VerticalLayout createTeacherLinks() {
 
-        }
+        VerticalLayout links =  new VerticalLayout();
+
+        Button button = new Button("Oceny");
+        button.addClickListener( e-> {
+            button.getUI().ifPresent(ui -> ui.navigate(TeacherGradesView.class));
+        });
+        button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        button.setWidthFull();
+        links.add(button);
+
+        links.getStyle().set("width", "250px").set("max-width", "100%");
         return links;
-    }
 
-    private static RouterLink createLink(MenuItemInfo menuItemInfo) {
-        RouterLink link = new RouterLink();
-        link.addClassNames("flex", "mx-s", "p-s", "relative", "text-secondary");
-        link.setRoute(menuItemInfo.getView());
-
-        Span icon = new Span();
-        icon.addClassNames("me-s", "text-m");
-        if (!menuItemInfo.getIconClass().isEmpty()) {
-            icon.addClassNames(menuItemInfo.getIconClass());
-        }
-
-        Span text = new Span(menuItemInfo.getText());
-        text.addClassNames("font-medium", "text-s");
-
-        link.add(icon, text);
-        return link;
     }
 
     private Footer createFooter() {

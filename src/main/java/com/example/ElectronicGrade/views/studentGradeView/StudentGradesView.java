@@ -10,6 +10,7 @@ import com.example.ElectronicGrade.views.MainLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -22,15 +23,15 @@ import java.util.*;
 
 @PageTitle("Oceny")
 @Route(value = "oceny", layout = MainLayout.class)
-public class OcenyView extends HorizontalLayout {
+public class StudentGradesView extends HorizontalLayout {
 
     private final Student student;
 
-    public OcenyView(SecurityService securityService, @Autowired StudentService studentService) {
+    public StudentGradesView(SecurityService securityService, @Autowired StudentService studentService) {
         this.student = studentService.findById(((User) securityService.getAuthenticatedUser()).getId()).orElseThrow();
 
         HorizontalLayout header = new HorizontalLayout();
-        H1 viewTitle = new H1();
+        H2 viewTitle = new H2();
         header.add(viewTitle);
         header.setWidth("100%");
         header.addClassNames("bg-base", "border-b", "border-contrast-10", "box-border", "flex", "h-xl", "items-center",
@@ -58,6 +59,7 @@ public class OcenyView extends HorizontalLayout {
             gradeGrid.addColumn(c->c.getDesc()).setHeader("Komentarz").setAutoWidth(true);
             gradeGrid.addColumn(c->c.getLesson().getDate().toString()).setHeader("Data");
             gradeGrid.setHeightByRows(true);
+            gradeGrid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
             verticalLayout.add(l);
             verticalLayout.add(gradeGrid);
         }
